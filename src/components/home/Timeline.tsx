@@ -132,7 +132,7 @@ export const Timeline = () => {
             <span aria-hidden className="absolute bottom-0 left-[5px] top-2 w-px bg-rule" />
             <span data-spine aria-hidden className="absolute bottom-0 left-[5px] top-2 w-px bg-rising" />
             {EXPERIENCE.map(({ year, entries }) => (
-              <div key={year} className="relative pb-12 pl-10">
+              <div key={year} data-year-group={year} className="relative pb-12 pl-10">
                 <h3 className="tabular text-sm text-ink-soft">{year}</h3>
                 <ul className="mt-4 space-y-9">
                   {entries.map((entry) => (

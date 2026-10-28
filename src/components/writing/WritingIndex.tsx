@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useMemo, useRef, useState } from "react";
 import { formatDate } from "@/lib/format";
 import { gsap, useGSAP, prefersReducedMotion } from "@/lib/gsap";
+import { TopicRail } from "./TopicRail";
 
 type Item = {
   slug: string;
@@ -40,6 +41,12 @@ export const WritingIndex = ({ items, topics }: { items: Item[]; topics: string[
     { scope: list, dependencies: [kind, topic], revertOnUpdate: true },
   );
 
+  // Topics in the order the list shows them, so the rail reads like the page.
+  const railTopics = useMemo(() => {
+    const present = new Set(visible.map((i) => i.topic));
+    return topics.filter((t) => present.has(t));
+  }, [visible, topics]);
+
   const chip = (active: boolean) =>
     `rounded-full border px-4 py-1.5 text-sm transition-colors ${
       active ? "border-ink bg-ink text-paper" : "border-ink/20 hover:border-ink"
@@ -64,9 +71,11 @@ export const WritingIndex = ({ items, topics }: { items: Item[]; topics: string[
         </div>
       </div>
 
+      {topic === "all" && <TopicRail topics={railTopics} />}
+
       <ul ref={list}>
         {visible.map((item) => (
-          <li key={item.slug} data-row className="border-b border-ink/15">
+          <li key={item.slug} data-row data-topic={item.topic} className="border-b border-ink/15">
             <Link
               href={`/writing/${item.slug}`}
               data-cursor="Read"

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getSettings } from "@/lib/store";
 import { Work } from "@/components/home/Work";
 import { Timeline } from "@/components/home/Timeline";
+import { CareerRuler } from "@/components/work/CareerRuler";
 
 // Re-render hourly so a signal with an end date switches itself off on time.
 export const revalidate = 3600;
@@ -17,6 +18,7 @@ export default async function WorkPage() {
     <>
       <Work stealth={settings.stealth} />
       <Timeline />
+      <CareerRuler />
     </>
   );
 }
