@@ -41,7 +41,8 @@ export const Contact = ({ copy, signal, email, linkedinUrl, newsletterUrl }: Pro
     root,
   );
 
-  const writeHref = email ? `mailto:${email}` : linkedinUrl;
+  // Opens a new Gmail message to the address; without an address, the LinkedIn profile.
+  const writeHref = email ? `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}` : linkedinUrl;
 
   return (
     <section ref={root} data-chapter="Conversation" id="contact" aria-labelledby="contact-title" className="overflow-hidden px-5 pb-20 pt-28 md:px-10 md:pt-40">
@@ -64,7 +65,7 @@ export const Contact = ({ copy, signal, email, linkedinUrl, newsletterUrl }: Pro
               <Magnetic>
                 <a
                   href={writeHref}
-                  target={email ? undefined : "_blank"}
+                  target="_blank"
                   rel="noreferrer"
                   className="inline-flex rounded-full bg-ink px-8 py-4 text-base text-paper transition-colors hover:bg-rising"
                 >
