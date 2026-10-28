@@ -11,6 +11,7 @@ export const AdminNav = ({ signalOn, revealed }: { signalOn: boolean; revealed: 
     { href: "/admin/signal", label: "Availability signal", badge: signalOn ? "On" : undefined },
     { href: "/admin/venture", label: "Stealth venture", badge: revealed ? "Revealed" : "Sealed" },
     { href: "/admin/profile", label: "Profile and numbers" },
+    { href: "/admin/copy", label: "Site copy" },
   ];
   return (
     <nav className="mt-6 flex gap-1 overflow-x-auto md:mt-10 md:flex-col">

@@ -1,3 +1,5 @@
+import type { SiteCopy } from "./copy";
+
 /** Starting topics. Jithendra edits the live list in the admin. */
 export const DEFAULT_TOPICS = ["Technology", "Business", "Startups", "Geopolitics"];
 export const TOPIC_MAX_LENGTH = 40;
@@ -64,5 +66,7 @@ export type SiteSettings = {
   topics: string[];
   signal: Signal;
   stealth: StealthVenture;
+  /** Editable copy for the career, work, lens and book sections. Always filled in by the store. */
+  copy: SiteCopy;
   updatedAt: string;
 };

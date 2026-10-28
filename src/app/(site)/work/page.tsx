@@ -16,8 +16,8 @@ export default async function WorkPage() {
   const settings = await getSettings();
   return (
     <>
-      <Work stealth={settings.stealth} />
-      <Timeline />
+      <Work stealth={settings.stealth} work={settings.copy.work} />
+      <Timeline career={settings.copy.career} />
       <CareerRuler />
     </>
   );

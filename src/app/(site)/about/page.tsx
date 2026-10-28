@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { listPublishedPosts } from "@/lib/store";
+import { getSettings, listPublishedPosts } from "@/lib/store";
 import { Lens } from "@/components/home/Lens";
 import { BookHint } from "@/components/home/BookHint";
 import type { Post } from "@/lib/types";
@@ -23,15 +23,15 @@ const LENS_ESSAY: Record<string, string> = {
 const toLink = (post?: Post) => (post ? { title: post.title, href: `/writing/${post.slug}` } : undefined);
 
 export default async function AboutPage() {
-  const posts = await listPublishedPosts();
+  const [posts, settings] = await Promise.all([listPublishedPosts(), getSettings()]);
   const essayLinks = Object.fromEntries(
     Object.entries(LENS_ESSAY).map(([panel, phrase]) => [panel, toLink(posts.find((p) => p.slug.includes(phrase)))]),
   );
 
   return (
     <>
-      <Lens essayLinks={essayLinks} />
-      <BookHint />
+      <Lens essayLinks={essayLinks} subjects={settings.copy.lens.subjects} />
+      <BookHint book={settings.copy.book} />
     </>
   );
 }

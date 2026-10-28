@@ -7,6 +7,7 @@ import { endSession, passwordMatches, requireAdmin, startSession } from "@/lib/a
 import { deletePost, getPostById, getRawSettings, listAllPosts, savePost, saveSettings } from "@/lib/store";
 import { slugify } from "@/lib/format";
 import { TOPIC_MAX_LENGTH, type Post, type SignalMode } from "@/lib/types";
+import type { ExperienceEntry, LeadershipItem, PracticeItem, SiteCopy } from "@/lib/copy";
 
 export type FormState = { ok?: boolean; message?: string };
 
@@ -169,3 +170,78 @@ export const saveTopicsAction = async (_: FormState, form: FormData): Promise<Fo
   refreshSite();
   return { ok: true, message: "Topics saved. The Writing page shows them straight away." };
 };
+
+/** Reads numbered form rows, such as exp0_role, and keeps the rows that have text. */
+const rows = <T extends object>(count: number, read: (i: number) => T, filled: (row: T) => boolean): T[] =>
+  Array.from({ length: count }, (_, i) => read(i)).filter(filled);
+
+const saveCopy = async (update: (copy: SiteCopy) => SiteCopy): Promise<FormState> => {
+  await requireAdmin();
+  const settings = await getRawSettings();
+  const failed = await saveFailure(() => saveSettings({ ...settings, copy: update(settings.copy) }));
+  if (failed) return failed;
+  refreshSite();
+  return { ok: true, message: "Saved. The page is updated." };
+};
+
+const EXPERIENCE_SLOTS = 12;
+const LEADERSHIP_SLOTS = 12;
+
+export const saveCareerAction = async (_: FormState, form: FormData): Promise<FormState> => {
+  const experience = rows<ExperienceEntry>(EXPERIENCE_SLOTS,
+    (i) => ({
+      year: text(form, `exp${i}_year`),
+      when: text(form, `exp${i}_when`),
+      role: text(form, `exp${i}_role`),
+      org: text(form, `exp${i}_org`),
+      note: text(form, `exp${i}_note`) || undefined,
+      current: form.get(`exp${i}_current`) === "on" || undefined,
+    }),
+    (row) => Boolean(row.role || row.org),
+  );
+  const leadership = rows<LeadershipItem>(LEADERSHIP_SLOTS,
+    (i) => ({ role: text(form, `lead${i}_role`), org: text(form, `lead${i}_org`), when: text(form, `lead${i}_when`) }),
+    (row) => Boolean(row.role),
+  );
+  return saveCopy((copy) => ({
+    ...copy,
+    career: {
+      experience,
+      leadership,
+      education: {
+        degree: text(form, "edu_degree") || copy.career.education.degree,
+        school: text(form, "edu_school"),
+        years: text(form, "edu_years"),
+      },
+    },
+  }));
+};
+
+export const saveWorkAction = async (_: FormState, form: FormData): Promise<FormState> => {
+  const practice = rows<PracticeItem>(3,
+    (i) => ({ title: text(form, `practice${i}_title`), text: text(form, `practice${i}_text`) }),
+    (row) => Boolean(row.title),
+  );
+  return saveCopy((copy) => ({
+    ...copy,
+    work: { roleLine: text(form, "roleLine"), intro: text(form, "intro"), practice },
+  }));
+};
+
+export const saveLensAction = async (_: FormState, form: FormData): Promise<FormState> =>
+  saveCopy((copy) => ({
+    ...copy,
+    lens: {
+      subjects: copy.lens.subjects.map((subject, i) => ({ ...subject, line: text(form, `line${i}`) || subject.line })),
+    },
+  }));
+
+export const saveBookAction = async (_: FormState, form: FormData): Promise<FormState> =>
+  saveCopy((copy) => ({
+    ...copy,
+    book: {
+      label: text(form, "label") || copy.book.label,
+      heading: text(form, "heading") || copy.book.heading,
+      body: text(form, "body"),
+    },
+  }));

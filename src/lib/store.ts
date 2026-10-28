@@ -2,6 +2,7 @@ import "server-only";
 import { promises as fs } from "fs";
 import path from "path";
 import { Redis } from "@upstash/redis";
+import { DEFAULT_COPY, type SiteCopy } from "./copy";
 import { DEFAULT_TOPICS, type Post, type SiteSettings } from "./types";
 
 /*
@@ -97,6 +98,14 @@ export const canSave = () => usesHostedStore() || !process.env.VERCEL;
 const withDefaults = (settings: SiteSettings): SiteSettings => ({
   ...settings,
   topics: settings.topics?.length ? settings.topics : DEFAULT_TOPICS,
+  copy: withDefaultCopy(settings.copy),
+});
+
+const withDefaultCopy = (copy: Partial<SiteCopy> | undefined): SiteCopy => ({
+  career: { ...DEFAULT_COPY.career, ...copy?.career },
+  work: { ...DEFAULT_COPY.work, ...copy?.work },
+  lens: { ...DEFAULT_COPY.lens, ...copy?.lens },
+  book: { ...DEFAULT_COPY.book, ...copy?.book },
 });
 
 export const getSettings = async (): Promise<SiteSettings> =>

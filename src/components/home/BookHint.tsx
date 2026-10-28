@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { gsap, useDeferredGSAP, prefersReducedMotion } from "@/lib/gsap";
+import type { SiteCopy } from "@/lib/copy";
 import { Folio } from "./Folio";
 
 /*
@@ -9,7 +10,7 @@ import { Folio } from "./Folio";
  * nothing of it shows. The pedestal turns slowly, the cloth breathes, and the
  * scene tilts toward the reader's pointer. Anticipation, not reveal.
  */
-export const BookHint = () => {
+export const BookHint = ({ book }: { book: SiteCopy["book"] }) => {
   const root = useRef<HTMLElement>(null);
   const scene = useRef<HTMLDivElement>(null);
   const cloth = useRef<SVGGElement>(null);
@@ -56,12 +57,12 @@ export const BookHint = () => {
       </p>
       <div className="mx-auto grid max-w-[1440px] items-center gap-16 md:grid-cols-12">
         <div className="md:col-span-6">
-          <Folio n="ii." label="Work in progress" tone="night" />
+          <Folio n="ii." label={book.label} tone="night" />
           <h2 id="book-title" className="font-display mt-6 text-[clamp(2.6rem,5.6vw,5.4rem)] leading-[0.98] tracking-[-0.03em]">
-            Something longer is being written.
+            {book.heading}
           </h2>
           <p className="mt-8 max-w-[44ch] text-lg leading-relaxed text-night-soft">
-            Not ready to show yet. When it is, it will be the first thing to read here.
+            {book.body}
           </p>
         </div>
 

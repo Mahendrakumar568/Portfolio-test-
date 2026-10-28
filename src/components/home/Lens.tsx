@@ -6,14 +6,15 @@ import { gsap, useDeferredGSAP, prefersReducedMotion } from "@/lib/gsap";
 import { Folio } from "./Folio";
 
 type Panel = { title: string; line: string; figure: React.ReactNode };
+type Figure = Omit<Panel, "line">;
 type EssayLink = { title: string; href: string } | undefined;
 
 const stroke = { fill: "none", stroke: "currentColor", strokeWidth: 1.2, vectorEffect: "non-scaling-stroke" as const };
 
-const PANELS: Panel[] = [
+/** The figures are drawn here; the titles and lines come from the editable copy. */
+const FIGURES: Figure[] = [
   {
     title: "Startups",
-    line: "How a founder turns a hunch into something people pay for, and what a headline about a startup really says about the problem underneath.",
     figure: (
       <svg viewBox="0 0 200 200" className="h-full w-full" aria-hidden>
         <circle data-draw cx="100" cy="150" r="6" {...stroke} />
@@ -26,7 +27,6 @@ const PANELS: Panel[] = [
   },
   {
     title: "Business models",
-    line: "Who pays, for what, and why they keep paying. Speed, trust and aggregation, and the markets where each one stops working.",
     figure: (
       <svg viewBox="0 0 200 200" className="h-full w-full" aria-hidden>
         <circle data-draw cx="78" cy="88" r="44" {...stroke} />
@@ -37,7 +37,6 @@ const PANELS: Panel[] = [
   },
   {
     title: "Emerging technology",
-    line: "AI as augmentation, not replacement. Search, security and the systems that decide what reaches us, explained from the inside.",
     figure: (
       <svg viewBox="0 0 200 200" className="h-full w-full" aria-hidden>
         {[40, 80, 120, 160].map((x) =>
@@ -49,7 +48,6 @@ const PANELS: Panel[] = [
   },
   {
     title: "Strategy and geopolitics",
-    line: "Tariffs, energy and alliances. Why India will not be cornered into choosing between powers, and what that means for business.",
     figure: (
       <svg viewBox="0 0 200 200" className="h-full w-full" aria-hidden>
         <circle data-draw cx="100" cy="100" r="70" {...stroke} />
@@ -85,7 +83,8 @@ const drawStrokes = (root: ParentNode, duration = 1.2) =>
     );
   });
 
-export const Lens = ({ essayLinks }: { essayLinks: Record<string, EssayLink> }) => {
+export const Lens = ({ essayLinks, subjects }: { essayLinks: Record<string, EssayLink>; subjects: { line: string }[] }) => {
+  const PANELS: Panel[] = FIGURES.map((figure, i) => ({ ...figure, line: subjects[i]?.line ?? "" }));
   const root = useRef<HTMLElement>(null);
   const prism = useRef<SVGSVGElement>(null);
   const detail = useRef<HTMLDivElement>(null);
@@ -114,7 +113,7 @@ export const Lens = ({ essayLinks }: { essayLinks: Record<string, EssayLink> }) 
     if (paused) return;
     const timer = window.setInterval(() => setActive((a) => (a + 1) % PANELS.length), AUTOPLAY_MS);
     return () => window.clearInterval(timer);
-  }, [paused]);
+  }, [paused, PANELS.length]);
 
   // Changing subject lights its ray and redraws its figure.
   useEffect(() => {

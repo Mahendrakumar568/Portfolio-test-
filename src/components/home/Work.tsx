@@ -2,26 +2,12 @@
 
 import { useRef } from "react";
 import type { StealthVenture } from "@/lib/types";
+import type { SiteCopy } from "@/lib/copy";
 import { gsap, useDeferredGSAP } from "@/lib/gsap";
 import { Folio } from "./Folio";
 import { Gem } from "./Gem";
 
-const PRACTICE = [
-  {
-    title: "Operations",
-    text: "Keeps the company's moving parts in step: the weekly rhythm, the documents, the follow-through.",
-  },
-  {
-    title: "Founder outreach",
-    text: "Supports the founder's conversations with partners, customers and the wider ecosystem, from first note to next step.",
-  },
-  {
-    title: "Timelines",
-    text: "Turns priorities into dates and holds the plan to them, so decisions land when they need to.",
-  },
-];
-
-export const Work = ({ stealth }: { stealth: StealthVenture }) => {
+export const Work = ({ stealth, work }: { stealth: StealthVenture; work: SiteCopy["work"] }) => {
   const root = useRef<HTMLElement>(null);
 
   useDeferredGSAP(
@@ -55,21 +41,17 @@ export const Work = ({ stealth }: { stealth: StealthVenture }) => {
         <div className="mt-10 grid gap-10 md:grid-cols-12">
           <div className="md:col-span-7">
             <p className="text-sm text-ink-soft">
-              Founder&rsquo;s Office, <span className="tabular">since Sep 2026</span>
+              {work.roleLine}
             </p>
             <h2 id="work-title" className="font-display mt-3 text-[clamp(3.2rem,9vw,9rem)] leading-[0.88] tracking-[-0.04em]">
               openCT
             </h2>
           </div>
-          <p className="self-end text-xl leading-relaxed md:col-span-5">
-            Jithendra runs Founder&rsquo;s Office operations at openCT, working beside the founder on outreach and
-            timelines. He joined as an operations intern in May 2026 and moved into the Founder&rsquo;s Office four
-            months later.
-          </p>
+          <p className="self-end text-xl leading-relaxed md:col-span-5">{work.intro}</p>
         </div>
 
         <ol data-practices className="mt-16 grid gap-px overflow-hidden rounded-[2px] bg-rule md:grid-cols-3">
-          {PRACTICE.map((item) => (
+          {work.practice.map((item) => (
             <li key={item.title} data-practice className="bg-paper p-8 md:p-10">
               <h3 className="font-display text-3xl tracking-[-0.01em]">{item.title}</h3>
               <p className="mt-4 text-ink-soft">{item.text}</p>

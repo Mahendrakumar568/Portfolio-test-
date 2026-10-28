@@ -3,63 +3,23 @@
 import Image from "next/image";
 import { useRef } from "react";
 import { gsap, useDeferredGSAP } from "@/lib/gsap";
+import type { SiteCopy } from "@/lib/copy";
 import { Folio } from "./Folio";
 
-type Entry = { when: string; role: string; org: string; note?: string; current?: boolean };
+/** Groups entries under their year, keeping the order they were written in. */
+const groupByYear = (entries: SiteCopy["career"]["experience"]) => {
+  const groups: { year: string; entries: SiteCopy["career"]["experience"] }[] = [];
+  for (const entry of entries) {
+    const group = groups.find((g) => g.year === entry.year);
+    if (group) group.entries.push(entry);
+    else groups.push({ year: entry.year, entries: [entry] });
+  }
+  return groups;
+};
 
-/** Paid roles and internships, newest first. This is the working record. */
-const EXPERIENCE: { year: string; entries: Entry[] }[] = [
-  {
-    year: "2026",
-    entries: [
-      {
-        when: "Sep 2026 to now",
-        role: "Founder's Office",
-        org: "openCT",
-        note: "Operations, founder outreach and timelines.",
-        current: true,
-      },
-      { when: "May to Aug 2026", role: "Operations Intern", org: "openCT" },
-    ],
-  },
-  {
-    year: "2025",
-    entries: [
-      {
-        when: "Jul 2025 to Jan 2026",
-        role: "Operations Intern",
-        org: "HalfBrain Technology",
-        note: "Daily workflows, documentation and process improvement.",
-      },
-    ],
-  },
-  {
-    year: "2024",
-    entries: [
-      {
-        when: "Jun 2024 to Jan 2026",
-        role: "Data Analyst Intern, Decision Support",
-        org: "Saurvi",
-        note: "SQL, analysis and reports for non-technical teams.",
-      },
-      { when: "Oct 2024 to Apr 2025", role: "Extended Reality Intern", org: "Universiti Teknologi MARA, Malaysia" },
-      { when: "Jun to Aug 2024", role: "HR Intern", org: "Agumentik Group" },
-    ],
-  },
-];
-
-/** Campus leadership and extracurricular roles, shown beside the degree. */
-const LEADERSHIP: { role: string; org: string; when: string }[] = [
-  { role: "Mentor", org: "Smart Tech Club, SRM AP", when: "Apr 2025 to Feb 2026" },
-  { role: "Co-Convener", org: "Smart Tech Club, SRM AP", when: "Jan 2024 to Apr 2025" },
-  { role: "Treasurer", org: "E-Cell, SRM AP", when: "Apr 2024 to Apr 2025" },
-  { role: "International Relations Representative", org: "SRM AP", when: "Dec 2023 to Nov 2025" },
-  { role: "CSR Project Intern", org: "SRM AP Directorate of Innovation and Entrepreneurship", when: "May 2024 to Sep 2025" },
-  { role: "Convener, Community Service", org: "SRM AP Directorate of Innovation and Entrepreneurship", when: "Jan 2023 to Feb 2024" },
-];
-
-export const Timeline = () => {
+export const Timeline = ({ career }: { career: SiteCopy["career"] }) => {
   const root = useRef<HTMLElement>(null);
+  const years = groupByYear(career.experience);
 
   useDeferredGSAP(
     () => {
@@ -131,7 +91,7 @@ export const Timeline = () => {
           <div data-years className="relative mt-8">
             <span aria-hidden className="absolute bottom-0 left-[5px] top-2 w-px bg-rule" />
             <span data-spine aria-hidden className="absolute bottom-0 left-[5px] top-2 w-px bg-rising" />
-            {EXPERIENCE.map(({ year, entries }) => (
+            {years.map(({ year, entries }) => (
               <div key={year} data-year-group={year} className="relative pb-12 pl-10">
                 <h3 className="tabular text-sm text-ink-soft">{year}</h3>
                 <ul className="mt-4 space-y-9">
@@ -165,14 +125,14 @@ export const Timeline = () => {
           <div data-education className="mt-4 rounded-[3px] border border-rule bg-paper-deep p-7 md:p-10">
             <p className="tabular text-xs uppercase tracking-[0.22em] text-rising-ink">Education</p>
             <h3 className="font-display mt-4 text-3xl leading-tight tracking-[-0.01em] md:text-4xl">
-              B.E. Computer Science
+              {career.education.degree}
             </h3>
-            <p className="mt-2 text-lg text-ink">SRM University, Andhra Pradesh</p>
-            <p className="tabular mt-1 text-sm text-ink-soft">2022 to 2026</p>
+            <p className="mt-2 text-lg text-ink">{career.education.school}</p>
+            <p className="tabular mt-1 text-sm text-ink-soft">{career.education.years}</p>
 
             <p className="tabular mt-8 text-xs uppercase tracking-[0.22em] text-ink-soft">Campus leadership</p>
             <ul className="mt-4 divide-y divide-rule border-t border-rule">
-              {LEADERSHIP.map((item) => (
+              {career.leadership.map((item) => (
                 <li key={`${item.role}-${item.org}`} className="grid gap-1 py-3 md:grid-cols-[1fr_auto] md:gap-6">
                   <p className="text-[15px]">
                     <span className="text-ink">{item.role}</span>
