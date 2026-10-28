@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { listPublishedPosts } from "@/lib/store";
 import { Lens } from "@/components/home/Lens";
+import { BookHint } from "@/components/home/BookHint";
 import type { Post } from "@/lib/types";
 
 // Re-render hourly so the essays linked from the lens stay current.
@@ -27,5 +28,10 @@ export default async function AboutPage() {
     Object.entries(LENS_ESSAY).map(([panel, phrase]) => [panel, toLink(posts.find((p) => p.slug.includes(phrase)))]),
   );
 
-  return <Lens essayLinks={essayLinks} />;
+  return (
+    <>
+      <Lens essayLinks={essayLinks} />
+      <BookHint />
+    </>
+  );
 }
