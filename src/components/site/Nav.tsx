@@ -41,7 +41,7 @@ export const Nav = ({ signal }: { signal: Signal }) => {
     <header
       className={`fixed inset-x-0 z-50 transition-[transform,background-color] duration-500 ${
         signal.mode === "featured" ? "top-10" : "top-0"
-      } ${hidden ? "-translate-y-[180%]" : "translate-y-0"} ${solid || menuOpen ? "bg-paper/95 backdrop-blur-md" : ""}`}
+      } ${hidden ? "-translate-y-[180%]" : "translate-y-0"} ${solid || menuOpen ? "bg-paper/95" : ""}`}
     >
       <nav className="mx-auto flex max-w-[1440px] items-center justify-between px-5 py-4 md:px-10">
         <div className="flex items-center gap-3">
