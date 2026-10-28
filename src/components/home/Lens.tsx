@@ -65,10 +65,10 @@ const PANELS: Panel[] = [
 const VIEW = { width: 480, height: 290 };
 const EXIT = { x: 226, y: 138 };
 const RAY_ENDS = [
-  { x: 372, y: 42 },
-  { x: 372, y: 108 },
-  { x: 372, y: 176 },
-  { x: 372, y: 244 },
+  { x: 350, y: 42 },
+  { x: 350, y: 108 },
+  { x: 350, y: 176 },
+  { x: 350, y: 244 },
 ];
 /** One colour per subject, so the split light reads as a spectrum. */
 const RAY_COLORS = ["#5ee6ff", "#d4f25c", "#b48cff", "#ff9d4d"];
@@ -173,7 +173,7 @@ export const Lens = ({ essayLinks }: { essayLinks: Record<string, EssayLink> }) 
             {paused ? "Choose a subject" : "Tap a subject, or use the arrow keys"}
           </p>
 
-          <div className="relative mx-auto mt-14 w-full max-w-[1100px]">
+          <div className="relative mx-auto mt-14 w-full max-w-[1240px]">
             <div
               className="relative overflow-hidden rounded-[2rem] bg-night"
               style={{
@@ -249,7 +249,7 @@ export const Lens = ({ essayLinks }: { essayLinks: Record<string, EssayLink> }) 
                     tabIndex={selected ? 0 : -1}
                     onClick={() => choose(i)}
                     style={{ ["--y" as string]: top }}
-                    className={`group flex w-full items-center gap-4 rounded-full border px-5 py-3 text-left transition-all duration-500 md:absolute md:left-[80%] md:w-[20%] md:-translate-y-1/2 md:[top:var(--y)] md:py-2.5 ${
+                    className={`group flex w-full items-center gap-4 rounded-full border px-5 py-3 text-left transition-all duration-500 md:absolute md:left-[75%] md:w-[25%] md:-translate-y-1/2 md:[top:var(--y)] md:py-2.5 ${
                       selected
                         ? "border-ember bg-ember text-paper shadow-[0_10px_30px_-10px_rgba(194,65,12,.6)]"
                         : "border-ink/20 bg-paper/60 text-ink hover:border-ember hover:bg-paper"
