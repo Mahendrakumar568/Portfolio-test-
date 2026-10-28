@@ -13,13 +13,7 @@ export const MediaBanner = ({ items }: { items: MediaItem[] }) => {
       </p>
       <div className="media-track flex w-max items-center gap-14 pr-14">
         {loop.map((item, i) => {
-          const content = item.logo ? (
-            // Every logo sits in the same box, so wide and tall marks line up.
-            <span className="flex h-24 w-56 items-center justify-center rounded-xl bg-paper p-5 transition-transform duration-300 group-hover:scale-105">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={item.logo} alt={i < items.length ? item.label : ""} className="max-h-full max-w-full object-contain" />
-            </span>
-          ) : (
+          const text = (
             <span className="flex items-baseline gap-5 whitespace-nowrap">
               {item.snippet && (
                 <span className="font-display text-[clamp(2rem,4vw,3.6rem)] italic leading-none tracking-[-0.02em] transition-colors group-hover:text-ember">
@@ -28,6 +22,18 @@ export const MediaBanner = ({ items }: { items: MediaItem[] }) => {
               )}
               <span className="text-sm uppercase tracking-[0.18em] text-night-soft">{item.label}</span>
             </span>
+          );
+          // A logo sits in a fixed chip beside its name and quote, so no item loses its words.
+          const content = item.logo ? (
+            <span className="flex items-center gap-6 whitespace-nowrap">
+              <span className="flex h-24 w-56 shrink-0 items-center justify-center rounded-xl bg-paper p-5 transition-transform duration-300 group-hover:scale-105">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={item.logo} alt={i < items.length ? item.label : ""} className="max-h-full max-w-full object-contain" />
+              </span>
+              {text}
+            </span>
+          ) : (
+            text
           );
           return (
             <div key={i} aria-hidden={i >= items.length || undefined} className="group flex shrink-0 items-center gap-14">
