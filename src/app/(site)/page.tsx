@@ -3,6 +3,7 @@ import { Hero } from "@/components/home/Hero";
 import { Thesis } from "@/components/home/Thesis";
 import { RisingIdeas } from "@/components/home/RisingIdeas";
 import { Contact } from "@/components/home/Contact";
+import { MediaBanner } from "@/components/home/MediaBanner";
 
 // Re-render hourly so a signal with an end date switches itself off on time.
 export const revalidate = 3600;
@@ -26,6 +27,7 @@ export default async function Home() {
         role={settings.copy.home.heroRole}
       />
       <Thesis statements={settings.copy.home.statements} />
+      <MediaBanner items={settings.copy.media} />
       <RisingIdeas
         copy={{ intro: settings.copy.home.risingIntro, frequency: settings.copy.home.risingFrequency, subscribeLabel: settings.copy.home.subscribeLabel }}
         subscribers={settings.subscribers}

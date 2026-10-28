@@ -107,6 +107,7 @@ const withDefaultCopy = (copy: Partial<SiteCopy> | undefined): SiteCopy => ({
   lens: { ...DEFAULT_COPY.lens, ...copy?.lens },
   book: { ...DEFAULT_COPY.book, ...copy?.book },
   home: { ...DEFAULT_COPY.home, ...copy?.home },
+  media: copy?.media ?? DEFAULT_COPY.media,
 });
 
 export const getSettings = async (): Promise<SiteSettings> =>

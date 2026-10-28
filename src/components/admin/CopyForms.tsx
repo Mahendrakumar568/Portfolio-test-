@@ -1,9 +1,10 @@
 "use client";
 
 import { useActionState } from "react";
-import { saveBookAction, saveCareerAction, saveHomeAction, saveLensAction, saveWorkAction, type FormState } from "@/app/admin/actions";
+import { saveBookAction, saveCareerAction, saveHomeAction, saveLensAction, saveMediaAction, saveWorkAction, type FormState } from "@/app/admin/actions";
 import type { SiteCopy } from "@/lib/copy";
 import { Field, Panel, SaveBar, Switch, inputClass } from "./ui";
+import { ImageField } from "./ImageField";
 
 const EXPERIENCE_SLOTS = 12;
 const LEADERSHIP_SLOTS = 12;
@@ -213,6 +214,41 @@ export const HomeForm = ({ home }: { home: SiteCopy["home"] }) => {
         </div>
       </Panel>
       <SaveBar state={state} label="Save home" />
+    </form>
+  );
+};
+
+const MEDIA_SLOTS = 12;
+
+export const MediaForm = ({ media }: { media: SiteCopy["media"] }) => {
+  const [state, action] = useSave(saveMediaAction);
+  const slots = [...media, ...Array(MEDIA_SLOTS).fill(undefined)].slice(0, MEDIA_SLOTS);
+  return (
+    <form action={action} className="space-y-6">
+      <Panel
+        title="Featured in"
+        description="The strip on the home page. Add a logo, a quoted snippet, or both. Add a link to make an item clickable. Leave the name empty to remove a row. The strip stays hidden while it is empty."
+      >
+        <div className="space-y-4">
+          {slots.map((item, i) => (
+            <div key={i} className="grid gap-4 rounded-md border border-ink/10 p-4 md:grid-cols-2">
+              <Field label="Name" hint="Publication or event. Used as the label and the image alt text.">
+                <input name={`media${i}_label`} defaultValue={item?.label} className={inputClass} />
+              </Field>
+              <Field label="Link (optional)">
+                <input name={`media${i}_url`} type="url" defaultValue={item?.url} className={inputClass} placeholder="https://" />
+              </Field>
+              <Field label="Quoted snippet (optional)" className="md:col-span-2">
+                <textarea name={`media${i}_snippet`} defaultValue={item?.snippet} rows={2} className={inputClass} />
+              </Field>
+              <div className="md:col-span-2">
+                <ImageField name={`media${i}_logo`} label="Logo (optional)" defaultValue={item?.logo} hint="A transparent PNG or a plain logo works best. When a logo is set, it shows instead of the snippet." />
+              </div>
+            </div>
+          ))}
+        </div>
+      </Panel>
+      <SaveBar state={state} label="Save featured" />
     </form>
   );
 };

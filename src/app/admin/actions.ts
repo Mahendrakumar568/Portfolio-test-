@@ -7,7 +7,7 @@ import { endSession, passwordMatches, requireAdmin, startSession } from "@/lib/a
 import { deletePost, getPostById, getRawSettings, listAllPosts, savePost, saveSettings } from "@/lib/store";
 import { slugify } from "@/lib/format";
 import { TOPIC_MAX_LENGTH, type Post, type SignalMode } from "@/lib/types";
-import type { ExperienceEntry, LeadershipItem, PracticeItem, SiteCopy } from "@/lib/copy";
+import type { ExperienceEntry, LeadershipItem, MediaItem, PracticeItem, SiteCopy } from "@/lib/copy";
 
 export type FormState = { ok?: boolean; message?: string };
 
@@ -264,3 +264,15 @@ export const saveHomeAction = async (_: FormState, form: FormData): Promise<Form
       linkedinLabel: text(form, "linkedinLabel") || copy.home.linkedinLabel,
     },
   }));
+
+const MEDIA_SLOTS = 12;
+
+export const saveMediaAction = async (_: FormState, form: FormData): Promise<FormState> => {
+  const media = rows<MediaItem>(MEDIA_SLOTS, (i) => ({
+    label: text(form, `media${i}_label`),
+    snippet: text(form, `media${i}_snippet`) || undefined,
+    logo: text(form, `media${i}_logo`) || undefined,
+    url: text(form, `media${i}_url`) || undefined,
+  }), (row) => Boolean(row.label));
+  return saveCopy((copy) => ({ ...copy, media }));
+};

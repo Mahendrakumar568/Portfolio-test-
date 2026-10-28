@@ -1,5 +1,5 @@
 import { getRawSettings } from "@/lib/store";
-import { BookForm, CareerForm, HomeForm, LensForm, WorkForm } from "@/components/admin/CopyForms";
+import { BookForm, CareerForm, HomeForm, LensForm, MediaForm, WorkForm } from "@/components/admin/CopyForms";
 
 export const dynamic = "force-dynamic";
 
@@ -12,6 +12,10 @@ export default async function CopyPage() {
         Every section below saves on its own. Changes go live as soon as you save.
       </p>
       <div className="mt-8 max-w-4xl space-y-12">
+        <div id="media">
+          <h2 className="mb-4 text-xl font-semibold">Featured in (home banner)</h2>
+          <MediaForm media={copy.media} />
+        </div>
         <div id="home">
           <h2 className="mb-4 text-xl font-semibold">Home page</h2>
           <HomeForm home={copy.home} />

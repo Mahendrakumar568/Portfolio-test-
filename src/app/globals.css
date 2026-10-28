@@ -162,3 +162,24 @@ html.lenis body {
 @media (hover: none) {
   .cursor-dot { display: none; }
 }
+
+/* Home media banner: a slow, endless strip. It pauses on hover and stops for reduced motion. */
+@keyframes media-scroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.media-track {
+  animation: media-scroll 48s linear infinite;
+}
+
+.media-track:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .media-track {
+    animation: none;
+  }
+}

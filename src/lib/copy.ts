@@ -17,6 +17,9 @@ export type LeadershipItem = { role: string; org: string; when: string };
 
 export type PracticeItem = { title: string; text: string };
 
+/** One item in the home page media banner: a logo or a quoted snippet, optionally linked. */
+export type MediaItem = { label: string; snippet?: string; logo?: string; url?: string };
+
 export type SiteCopy = {
   career: {
     experience: ExperienceEntry[];
@@ -31,6 +34,7 @@ export type SiteCopy = {
   /** Titles are fixed: each one links to its essay. Only the lines are editable. */
   lens: { subjects: { title: string; line: string }[] };
   book: { label: string; heading: string; body: string };
+  media: MediaItem[];
   home: {
     heroEditor: string;
     heroRole: string;
@@ -99,6 +103,7 @@ export const DEFAULT_COPY: SiteCopy = {
     heading: "Something longer is being written.",
     body: "Not ready to show yet. When it is, it will be the first thing to read here.",
   },
+  media: [],
   home: {
     heroEditor: "Editor of Rising Ideas.",
     heroRole: "Founder's Office at openCT.",
