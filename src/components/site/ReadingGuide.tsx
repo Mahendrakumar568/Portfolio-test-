@@ -76,7 +76,7 @@ export const ReadingGuide = () => {
     <aside
       aria-label="Reading progress"
       aria-hidden={!started}
-      className={`fixed bottom-4 right-4 z-40 w-[min(23rem,calc(100vw-2rem))] rounded-[3px] border border-rule bg-paper/90 px-4 py-3 text-ink shadow-[0_12px_40px_-12px_rgba(22,21,19,.3)] backdrop-blur transition-all duration-700 md:bottom-6 md:right-6 ${
+      className={`fixed bottom-4 right-4 z-40 w-[min(23rem,calc(100vw-2rem))] rounded-[3px] border border-rule bg-paper/90 px-4 py-3 text-ink shadow-[0_12px_40px_-12px_rgba(22,21,19,.3)] transition-all duration-700 md:bottom-6 md:right-6 ${
         started ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-4 opacity-0"
       }`}
     >

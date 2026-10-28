@@ -54,7 +54,7 @@ export const CareerRuler = () => {
         visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
       }`}
     >
-      <div className="relative flex w-[min(60vw,560px)] items-end justify-between rounded-full border border-ink/15 bg-paper/90 px-6 pb-3 pt-4 shadow-[0_12px_30px_-18px_rgba(20,20,20,.5)] backdrop-blur">
+      <div className="relative flex w-[min(60vw,560px)] items-end justify-between rounded-full border border-ink/15 bg-paper/90 px-6 pb-3 pt-4 shadow-[0_12px_30px_-18px_rgba(20,20,20,.5)]">
         <span className="absolute inset-x-6 bottom-3 h-px bg-rule" />
         <span
           className="absolute bottom-[11px] left-6 h-[2px] origin-left bg-rising transition-transform duration-300"
