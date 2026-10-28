@@ -147,7 +147,7 @@ export const Hero = ({ headline, thesis, portrait }: Props) => {
   );
 
   return (
-    <section ref={root} className="relative flex min-h-[100svh] flex-col overflow-hidden px-5 pb-10 pt-28 md:px-10 md:pt-32">
+    <section ref={root} data-chapter="Opening" className="relative flex min-h-[100svh] flex-col overflow-hidden px-5 pb-10 pt-28 md:px-10 md:pt-32">
       <div data-dawn-sky aria-hidden className="absolute inset-0 bg-night [clip-path:inset(0%_0%_0%_0%)]">
         {STARS.map((star, i) => (
           <span

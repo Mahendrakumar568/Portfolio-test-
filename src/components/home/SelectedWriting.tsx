@@ -32,7 +32,7 @@ export const SelectedWriting = ({ essays }: { essays: Essay[] }) => {
   };
 
   return (
-    <section ref={root} aria-labelledby="writing-title" className="px-5 py-28 md:px-10 md:py-40" onPointerMove={follow}>
+    <section ref={root} data-chapter="Writing" aria-labelledby="writing-title" className="px-5 py-28 md:px-10 md:py-40" onPointerMove={follow}>
       <div className="mx-auto max-w-[1440px]">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>

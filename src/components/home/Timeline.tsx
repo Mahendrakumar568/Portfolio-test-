@@ -80,7 +80,7 @@ export const Timeline = () => {
   );
 
   return (
-    <section ref={root} aria-labelledby="timeline-title" className="border-t border-rule px-5 py-28 md:px-10 md:py-40">
+    <section ref={root} data-chapter="The path" aria-labelledby="timeline-title" className="border-t border-rule px-5 py-28 md:px-10 md:py-40">
       <div className="mx-auto grid max-w-[1440px] gap-16 md:grid-cols-12">
         <div className="md:col-span-4">
           <div className="md:sticky md:top-28">

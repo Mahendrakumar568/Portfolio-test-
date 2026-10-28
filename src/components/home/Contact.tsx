@@ -37,7 +37,7 @@ export const Contact = ({ signal, email, linkedinUrl, newsletterUrl }: Props) =>
   const writeHref = email ? `mailto:${email}` : linkedinUrl;
 
   return (
-    <section ref={root} id="contact" aria-labelledby="contact-title" className="overflow-hidden px-5 pb-20 pt-28 md:px-10 md:pt-40">
+    <section ref={root} data-chapter="Conversation" id="contact" aria-labelledby="contact-title" className="overflow-hidden px-5 pb-20 pt-28 md:px-10 md:pt-40">
       <div className="mx-auto max-w-[1440px]">
         <Folio n="vii." label="Conversation" />
         <h2
