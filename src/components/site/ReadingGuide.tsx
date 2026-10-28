@@ -6,7 +6,6 @@ import { useEffect, useRef, useState } from "react";
 const START = { x: 12, y: 58 };
 const CONTROL = { x: 90, y: -6 };
 const END = { x: 168, y: 58 };
-const ESTIMATED_MINUTES = 4;
 
 /** Point on the quadratic arc the sun travels, for progress t between 0 and 1. */
 const pointOnArc = (t: number) => {
@@ -20,12 +19,11 @@ const pointOnArc = (t: number) => {
 /*
  * A sun that travels across the page as the reader scrolls. It shows how far
  * they have come, names the chapter they are in and the next one, and counts
- * down the minutes left. Near the end it becomes an invitation to get in touch.
+ Near the end it becomes an invitation to get in touch.
  */
 export const ReadingGuide = () => {
   const [chapters, setChapters] = useState<string[]>([]);
   const [current, setCurrent] = useState(0);
-  const [minutes, setMinutes] = useState(ESTIMATED_MINUTES);
   const [done, setDone] = useState(false);
   const [started, setStarted] = useState(false);
   const sun = useRef<SVGCircleElement>(null);
@@ -54,7 +52,6 @@ export const ReadingGuide = () => {
         if (section.getBoundingClientRect().top <= line) index = i;
       });
       setCurrent(index);
-      setMinutes(Math.max(1, Math.ceil((1 - progress) * ESTIMATED_MINUTES)));
       setDone(progress > 0.96);
       setStarted(window.scrollY > 80);
     };
@@ -89,7 +86,7 @@ export const ReadingGuide = () => {
             {done ? "You made it" : `Now · ${chapters[current]}`}
           </p>
           <p className="mt-0.5 truncate text-sm">
-            {done ? "Let's talk ideas." : next ? `Up next: ${next} · about ${minutes} min left` : `About ${minutes} min left`}
+            {done ? "Let's talk ideas." : next ? `Up next: ${next}` : chapters[current]}
           </p>
         </div>
         <svg viewBox="0 0 180 70" className="h-12 w-[120px] shrink-0" aria-hidden>
