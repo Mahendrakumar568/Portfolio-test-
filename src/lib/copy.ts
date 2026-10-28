@@ -103,7 +103,12 @@ export const DEFAULT_COPY: SiteCopy = {
     heading: "Something longer is being written.",
     body: "Not ready to show yet. When it is, it will be the first thing to read here.",
   },
-  media: [],
+  // Placeholders until real press is added in admin. They name no real publication.
+  media: [
+    { label: "Placeholder: publication name", snippet: "Placeholder quote. Replace it in admin with a real feature." },
+    { label: "Placeholder: event name", snippet: "Placeholder quote. Replace it in admin with a real feature." },
+    { label: "Placeholder: newsletter name", snippet: "Placeholder quote. Replace it in admin with a real feature." },
+  ],
   home: {
     heroEditor: "Editor of Rising Ideas.",
     heroRole: "Founder's Office at openCT.",
