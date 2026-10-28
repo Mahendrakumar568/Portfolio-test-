@@ -73,7 +73,7 @@ export const RisingIdeas = ({ subscribers, editions, newsletterUrl, items, showi
   return (
     <section ref={root} data-chapter="Rising Ideas" id="rising-ideas" aria-labelledby="ri-title" className="relative bg-night px-5 py-28 text-night-ink md:px-10 md:py-40">
       <div className="mx-auto max-w-[1440px]">
-        <Folio n="iii." label="The newsletter" tone="night" />
+        <Folio n="ii." label="The newsletter" tone="night" />
         <div className="mt-10 grid items-center gap-14 md:grid-cols-12">
           <div className="[perspective:1200px] md:col-span-5">
             <div

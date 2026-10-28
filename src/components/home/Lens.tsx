@@ -113,7 +113,7 @@ export const Lens = ({ essayLinks }: { essayLinks: Record<string, { title: strin
     <section ref={root} data-chapter="The lens" aria-labelledby="lens-title" className="relative overflow-hidden bg-paper-deep">
       <div className="flex min-h-[100svh] flex-col justify-center py-24">
         <div className="mx-auto mb-12 w-full max-w-[1440px] px-5 md:px-10">
-          <Folio n="ii." label="The lens" />
+          <Folio n="i." label="The lens" />
           <h2 id="lens-title" className="font-display mt-4 max-w-[18ch] text-[clamp(2rem,4vw,3.6rem)] leading-[1.05] tracking-[-0.02em]">
             Four subjects, read for the logic underneath.
           </h2>

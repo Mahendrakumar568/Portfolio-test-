@@ -39,7 +39,7 @@ export const Contact = ({ signal, email, linkedinUrl, newsletterUrl }: Props) =>
   return (
     <section ref={root} data-chapter="Conversation" id="contact" aria-labelledby="contact-title" className="overflow-hidden px-5 pb-20 pt-28 md:px-10 md:pt-40">
       <div className="mx-auto max-w-[1440px]">
-        <Folio n="vii." label="Conversation" />
+        <Folio n="iii." label="Conversation" />
         <h2
           id="contact-title"
           data-contact-headline

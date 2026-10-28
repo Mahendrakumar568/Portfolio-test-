@@ -50,7 +50,7 @@ export const Work = ({ stealth }: { stealth: StealthVenture }) => {
   return (
     <section ref={root} data-chapter="The work" id="work" aria-labelledby="work-title" className="px-5 pb-20 pt-28 md:px-10 md:pb-28 md:pt-40">
       <div className="mx-auto max-w-[1440px]">
-        <Folio n="iv." label="The work" />
+        <Folio n="i." label="The work" />
 
         <div className="mt-10 grid gap-10 md:grid-cols-12">
           <div className="md:col-span-7">
