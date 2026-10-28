@@ -160,6 +160,9 @@ export const Lens = ({ essayLinks }: { essayLinks: Record<string, EssayLink> }) 
         onKeyDown={onKey}
         className="relative overflow-hidden bg-paper-deep px-5 pb-24 pt-28 md:px-10 md:pb-32 md:pt-36"
       >
+        <p aria-hidden className="pointer-events-none absolute -right-[2vw] top-[8vw] select-none font-display text-[24vw] leading-none tracking-[-0.04em] text-ink/[0.04]">
+          Lens
+        </p>
         <div className="mx-auto max-w-[1440px]">
           <Folio n="i." label="The lens" />
           <h2

@@ -51,6 +51,9 @@ export const BookHint = () => {
       aria-labelledby="book-title"
       className="relative overflow-hidden border-t border-ink/15 bg-ink px-5 py-28 text-paper md:px-10 md:py-40"
     >
+      <p aria-hidden className="pointer-events-none absolute -bottom-[6vw] -left-[1vw] select-none font-display text-[26vw] leading-none tracking-[-0.04em] text-paper/[0.035]">
+        Draft
+      </p>
       <div className="mx-auto grid max-w-[1440px] items-center gap-16 md:grid-cols-12">
         <div className="md:col-span-6">
           <Folio n="ii." label="Work in progress" tone="night" />
