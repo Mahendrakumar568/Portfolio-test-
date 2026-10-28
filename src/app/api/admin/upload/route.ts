@@ -30,6 +30,10 @@ export const POST = async (request: Request) => {
     return Response.json({ path: blob.url });
   }
 
+  if (process.env.VERCEL) {
+    const error = "Uploads need Vercel Blob storage. Connect a Blob store to the project, then redeploy.";
+    return Response.json({ error }, { status: 503 });
+  }
   const dir = path.join(process.cwd(), "content", "uploads");
   await fs.mkdir(dir, { recursive: true });
   await fs.writeFile(path.join(dir, name), Buffer.from(await file.arrayBuffer()));

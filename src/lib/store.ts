@@ -19,6 +19,9 @@ type Backend = {
   removePost: (id: string) => Promise<void>;
 };
 
+const HOSTED_STORE_MISSING =
+  "Saving needs online storage on Vercel. Connect Upstash Redis to the project in the Vercel dashboard, then redeploy.";
+
 const CONTENT_DIR = path.join(process.cwd(), "content");
 const POSTS_DIR = path.join(CONTENT_DIR, "posts");
 const SETTINGS_FILE = path.join(CONTENT_DIR, "settings.json");
@@ -26,6 +29,7 @@ const SETTINGS_FILE = path.join(CONTENT_DIR, "settings.json");
 const readJson = async <T>(file: string): Promise<T> => JSON.parse(await fs.readFile(file, "utf8")) as T;
 
 const writeJson = async (file: string, data: unknown) => {
+  if (process.env.VERCEL) throw new Error(HOSTED_STORE_MISSING);
   const tmp = `${file}.${process.pid}.tmp`;
   await fs.writeFile(tmp, JSON.stringify(data, null, 2) + "\n", "utf8");
   await fs.rename(tmp, file);
@@ -45,17 +49,34 @@ const fileBackend: Backend = {
 const SETTINGS_KEY = "site:settings";
 const POSTS_KEY = "site:posts";
 
-const redisBackend = (redis: Redis): Backend => ({
-  readSettings: async () => {
-    const settings = await redis.get<SiteSettings>(SETTINGS_KEY);
-    if (!settings) throw new Error("No settings in Redis yet. Run: node scripts/push-content.mjs");
-    return settings;
-  },
-  writeSettings: async (settings) => void (await redis.set(SETTINGS_KEY, settings)),
-  readPosts: async () => Object.values((await redis.hgetall<Record<string, Post>>(POSTS_KEY)) ?? {}),
-  writePost: async (post) => void (await redis.hset(POSTS_KEY, { [post.id]: post })),
-  removePost: async (id) => void (await redis.hdel(POSTS_KEY, id)),
-});
+// An empty Redis starts from the content bundled with the site, so connecting
+// storage needs no separate import step. The first post write copies the
+// bundled posts across, after which Redis is the only source.
+const redisBackend = (redis: Redis): Backend => {
+  const storedPosts = async () => (await redis.hgetall<Record<string, Post>>(POSTS_KEY)) ?? {};
+  const seedPostsIfEmpty = async () => {
+    if (Object.keys(await storedPosts()).length > 0) return;
+    const bundled = await fileBackend.readPosts();
+    if (bundled.length > 0) await redis.hset(POSTS_KEY, Object.fromEntries(bundled.map((p) => [p.id, p])));
+  };
+
+  return {
+    readSettings: async () => (await redis.get<SiteSettings>(SETTINGS_KEY)) ?? fileBackend.readSettings(),
+    writeSettings: async (settings) => void (await redis.set(SETTINGS_KEY, settings)),
+    readPosts: async () => {
+      const posts = Object.values(await storedPosts());
+      return posts.length > 0 ? posts : fileBackend.readPosts();
+    },
+    writePost: async (post) => {
+      await seedPostsIfEmpty();
+      await redis.hset(POSTS_KEY, { [post.id]: post });
+    },
+    removePost: async (id) => {
+      await seedPostsIfEmpty();
+      await redis.hdel(POSTS_KEY, id);
+    },
+  };
+};
 
 const redisCredentials = () => {
   const url = process.env.KV_REST_API_URL ?? process.env.UPSTASH_REDIS_REST_URL;
@@ -69,6 +90,9 @@ const backend = (): Backend => {
 };
 
 export const usesHostedStore = () => redisCredentials() !== null;
+
+// On Vercel the deployed files are read-only, so edits only stick with Redis connected.
+export const canSave = () => usesHostedStore() || !process.env.VERCEL;
 
 export const getSettings = async (): Promise<SiteSettings> => withExpiredSignalOff(await backend().readSettings());
 

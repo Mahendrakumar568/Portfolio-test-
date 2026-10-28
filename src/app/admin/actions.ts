@@ -18,6 +18,16 @@ const number = (form: FormData, key: string) => {
 
 const refreshSite = () => revalidatePath("/", "layout");
 
+// Returns the storage error as a message for the form instead of an error page.
+const saveFailure = async (save: () => Promise<void>): Promise<FormState | null> => {
+  try {
+    await save();
+    return null;
+  } catch (error) {
+    return { message: error instanceof Error ? error.message : "Couldn't save. Try again." };
+  }
+};
+
 export const signIn = async (_: FormState, form: FormData): Promise<FormState> => {
   if (!passwordMatches(text(form, "password"))) return { message: "That password isn't right. Try again." };
   await startSession();
@@ -60,7 +70,8 @@ export const savePostAction = async (_: FormState, form: FormData): Promise<Form
     published: form.get("published") === "on",
     updatedAt: existing?.updatedAt ?? new Date().toISOString(),
   };
-  await savePost(post);
+  const failed = await saveFailure(() => savePost(post));
+  if (failed) return failed;
   refreshSite();
   if (!existing) redirect(`/admin/posts/${id}?created=1`);
   return { ok: true, message: post.published ? "Published. It's live on the site." : "Saved as a draft." };
@@ -77,15 +88,18 @@ export const saveSignalAction = async (_: FormState, form: FormData): Promise<Fo
   await requireAdmin();
   const settings = await getRawSettings();
   const mode = text(form, "mode") as SignalMode;
-  await saveSettings({
-    ...settings,
-    signal: {
-      mode: ["off", "subtle", "featured"].includes(mode) ? mode : "off",
-      message: text(form, "message") || settings.signal.message,
-      ctaLabel: text(form, "ctaLabel") || "Start a conversation",
-      endsOn: text(form, "endsOn") || undefined,
-    },
-  });
+  const failed = await saveFailure(() =>
+    saveSettings({
+      ...settings,
+      signal: {
+        mode: ["off", "subtle", "featured"].includes(mode) ? mode : "off",
+        message: text(form, "message") || settings.signal.message,
+        ctaLabel: text(form, "ctaLabel") || "Start a conversation",
+        endsOn: text(form, "endsOn") || undefined,
+      },
+    }),
+  );
+  if (failed) return failed;
   refreshSite();
   return { ok: true, message: mode === "off" ? "Signal switched off." : "Signal is live." };
 };
@@ -96,17 +110,20 @@ export const saveVentureAction = async (_: FormState, form: FormData): Promise<F
   const revealed = form.get("revealed") === "on";
   const name = text(form, "name");
   if (revealed && !name) return { message: "Add the venture's name before revealing it." };
-  await saveSettings({
-    ...settings,
-    stealth: {
-      revealed,
-      sector: text(form, "sector") || "Healthcare",
-      teaser: text(form, "teaser") || settings.stealth.teaser,
-      name,
-      summary: text(form, "summary"),
-      url: text(form, "url") || undefined,
-    },
-  });
+  const failed = await saveFailure(() =>
+    saveSettings({
+      ...settings,
+      stealth: {
+        revealed,
+        sector: text(form, "sector") || "Healthcare",
+        teaser: text(form, "teaser") || settings.stealth.teaser,
+        name,
+        summary: text(form, "summary"),
+        url: text(form, "url") || undefined,
+      },
+    }),
+  );
+  if (failed) return failed;
   refreshSite();
   return { ok: true, message: revealed ? "Revealed. The full card is live." : "Saved. The venture stays sealed." };
 };
@@ -114,20 +131,23 @@ export const saveVentureAction = async (_: FormState, form: FormData): Promise<F
 export const saveProfileAction = async (_: FormState, form: FormData): Promise<FormState> => {
   await requireAdmin();
   const settings = await getRawSettings();
-  await saveSettings({
-    ...settings,
-    headline: text(form, "headline") || settings.headline,
-    thesis: text(form, "thesis"),
-    bio: text(form, "bio"),
-    portrait: text(form, "portrait") || settings.portrait,
-    email: text(form, "email"),
-    location: text(form, "location"),
-    linkedinUrl: text(form, "linkedinUrl"),
-    newsletterUrl: text(form, "newsletterUrl"),
-    mediumUrl: text(form, "mediumUrl"),
-    subscribers: number(form, "subscribers") ?? settings.subscribers,
-    editions: number(form, "editions") ?? settings.editions,
-  });
+  const failed = await saveFailure(() =>
+    saveSettings({
+      ...settings,
+      headline: text(form, "headline") || settings.headline,
+      thesis: text(form, "thesis"),
+      bio: text(form, "bio"),
+      portrait: text(form, "portrait") || settings.portrait,
+      email: text(form, "email"),
+      location: text(form, "location"),
+      linkedinUrl: text(form, "linkedinUrl"),
+      newsletterUrl: text(form, "newsletterUrl"),
+      mediumUrl: text(form, "mediumUrl"),
+      subscribers: number(form, "subscribers") ?? settings.subscribers,
+      editions: number(form, "editions") ?? settings.editions,
+    }),
+  );
+  if (failed) return failed;
   refreshSite();
   return { ok: true, message: "Profile saved." };
 };

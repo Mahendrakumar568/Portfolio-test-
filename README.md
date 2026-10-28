@@ -30,7 +30,9 @@ For hosting on Vercel, whose disk is read-only, the site switches itself to host
 - `KV_REST_API_URL` and `KV_REST_API_TOKEN` (Vercel's Redis integration, or Upstash): settings and posts are stored in Redis.
 - `BLOB_READ_WRITE_TOKEN` (Vercel Blob): images uploaded in the admin are stored in Blob.
 
-On the first deploy, copy the local content into Redis once:
+An empty Redis shows the content bundled in `content/`, and the first save in the admin copies the bundled posts into Redis, so no import step is needed. Without these variables the admin shows a notice on Vercel and saves return a clear message instead of failing.
+
+To overwrite Redis with the local content later (for example after editing `content/` by hand):
 
 ```bash
 node --env-file=.env.local scripts/push-content.mjs

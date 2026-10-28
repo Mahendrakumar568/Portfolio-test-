@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/auth";
-import { getSettings } from "@/lib/store";
+import { canSave, getSettings } from "@/lib/store";
 import { signOut } from "../actions";
 import { AdminNav } from "@/components/admin/AdminNav";
 
@@ -24,7 +24,16 @@ export default async function PanelLayout({ children }: LayoutProps<"/admin">) {
           </form>
         </div>
       </aside>
-      <main className="px-6 py-8 md:px-10 md:py-10">{children}</main>
+      <main className="px-6 py-8 md:px-10 md:py-10">
+        {!canSave() && (
+          <p role="status" className="mb-8 border-l-2 border-rising bg-rising/10 px-4 py-3 text-sm text-ink">
+            Changes can&apos;t be saved yet. This site runs on Vercel, where files are read-only. Connect Upstash
+            Redis (for posts and settings) and a Blob store (for images) under Storage in the Vercel project, then
+            redeploy.
+          </p>
+        )}
+        {children}
+      </main>
     </div>
   );
 }
