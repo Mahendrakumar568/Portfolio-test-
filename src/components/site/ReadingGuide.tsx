@@ -27,6 +27,7 @@ export const ReadingGuide = () => {
   const [current, setCurrent] = useState(0);
   const [minutes, setMinutes] = useState(ESTIMATED_MINUTES);
   const [done, setDone] = useState(false);
+  const [started, setStarted] = useState(false);
   const sun = useRef<SVGCircleElement>(null);
   const glow = useRef<SVGCircleElement>(null);
 
@@ -55,6 +56,7 @@ export const ReadingGuide = () => {
       setCurrent(index);
       setMinutes(Math.max(1, Math.ceil((1 - progress) * ESTIMATED_MINUTES)));
       setDone(progress > 0.96);
+      setStarted(window.scrollY > 80);
     };
     const onScroll = () => {
       if (!frame) frame = requestAnimationFrame(update);
@@ -76,7 +78,10 @@ export const ReadingGuide = () => {
   return (
     <aside
       aria-label="Reading progress"
-      className="fixed bottom-4 right-4 z-40 w-[min(23rem,calc(100vw-2rem))] rounded-[3px] border border-rule bg-paper/90 px-4 py-3 text-ink shadow-[0_12px_40px_-12px_rgba(22,21,19,.3)] backdrop-blur md:bottom-6 md:right-6"
+      aria-hidden={!started}
+      className={`fixed bottom-4 right-4 z-40 w-[min(23rem,calc(100vw-2rem))] rounded-[3px] border border-rule bg-paper/90 px-4 py-3 text-ink shadow-[0_12px_40px_-12px_rgba(22,21,19,.3)] backdrop-blur transition-all duration-700 md:bottom-6 md:right-6 ${
+        started ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-4 opacity-0"
+      }`}
     >
       <div className="flex items-end justify-between gap-4">
         <div className="min-w-0">

@@ -35,7 +35,7 @@ export const Thesis = () => {
   );
 
   return (
-    <section ref={root} data-chapter="What I believe" aria-labelledby="thesis-title" className="relative flex min-h-[100svh] items-center px-5 py-24 md:px-10">
+    <section ref={root} id="thesis" data-chapter="What I believe" aria-labelledby="thesis-title" className="relative flex min-h-[100svh] items-center px-5 py-24 md:px-10">
       <div className="mx-auto grid w-full max-w-[1440px] gap-10 md:grid-cols-12">
         <div className="md:col-span-3">
           <Folio n="i." label="What I believe" />

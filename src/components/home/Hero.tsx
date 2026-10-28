@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRef } from "react";
 import { gsap, useGSAP, prefersReducedMotion } from "@/lib/gsap";
 import { INTRO_DONE } from "@/components/site/Preloader";
+import { scrollToTarget } from "@/components/site/SmoothScroll";
 
 type Props = { headline: string; thesis: string; portrait?: string };
 
@@ -212,12 +213,23 @@ export const Hero = ({ headline, thesis, portrait }: Props) => {
           <p className="max-w-[34ch] text-lg leading-relaxed md:col-span-5 md:text-xl">
             {thesis}
           </p>
-          <div data-hero-fade className="hidden items-center gap-3 text-sm text-ink-soft md:col-span-3 md:col-start-7 md:flex">
-            <span className="relative block h-10 w-px overflow-hidden bg-rule">
-              <span className="absolute inset-x-0 top-0 h-1/2 animate-[scrollcue_1.8s_ease-in-out_infinite] bg-ink" />
+          <button
+            type="button"
+            data-hero-fade
+            onClick={() => scrollToTarget("#thesis")}
+            aria-label="Scroll down to begin"
+            className="group flex flex-col items-start gap-4 text-left md:col-span-3 md:col-start-7"
+          >
+            <span className="relative block h-16 w-px overflow-hidden bg-rule">
+              <span className="absolute inset-x-0 top-0 h-7 animate-[scrollcue_1.6s_ease-in-out_infinite] bg-ember" />
             </span>
-            Scroll to read
-          </div>
+            <span className="font-display text-2xl italic leading-none text-ink transition-colors group-hover:text-rising md:text-3xl">
+              Scroll to begin the day
+            </span>
+            <span className="animate-[nudge_2.4s_ease-in-out_infinite] text-lg text-rising" aria-hidden>
+              &darr;
+            </span>
+          </button>
           {portrait && (
             <figure className="md:col-span-2 md:col-start-11 md:justify-self-end">
               <div data-hero-portrait className="relative aspect-[4/5] w-36 overflow-hidden rounded-[2px] md:w-[min(15vw,26vh)]">
@@ -237,7 +249,7 @@ export const Hero = ({ headline, thesis, portrait }: Props) => {
           )}
         </div>
       </div>
-      <style>{`@keyframes scrollcue { 0% { transform: translateY(-100%) } 100% { transform: translateY(200%) } }`}</style>
+      <style>{`@keyframes scrollcue { 0% { transform: translateY(-100%) } 100% { transform: translateY(200%) } } @keyframes nudge { 0%, 100% { transform: translateY(0) } 50% { transform: translateY(8px) } }`}</style>
     </section>
   );
 };
