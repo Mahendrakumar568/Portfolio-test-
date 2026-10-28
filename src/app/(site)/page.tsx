@@ -2,8 +2,6 @@ import { getSettings, listPublishedPosts } from "@/lib/store";
 import { Hero } from "@/components/home/Hero";
 import { Thesis } from "@/components/home/Thesis";
 import { RisingIdeas } from "@/components/home/RisingIdeas";
-import { Work } from "@/components/home/Work";
-import { SelectedWriting } from "@/components/home/SelectedWriting";
 import { Contact } from "@/components/home/Contact";
 
 // Re-render hourly so a signal with an end date switches itself off on time.
@@ -14,7 +12,6 @@ export default async function Home() {
   const [settings, posts] = await Promise.all([getSettings(), listPublishedPosts()]);
   const editions = posts.filter((p) => p.kind === "edition");
   const essays = posts.filter((p) => p.kind === "essay");
-  const featured = posts.filter((p) => p.featured);
 
   const newsletterItems = (editions.length > 0 ? editions : essays.filter((p) => p.date >= "2026-01-01")).slice(0, 4);
 
@@ -30,8 +27,6 @@ export default async function Home() {
         items={newsletterItems}
         showingEditions={editions.length > 0}
       />
-      <Work stealth={settings.stealth} />
-      <SelectedWriting essays={featured.slice(0, 3)} />
       <Contact
         signal={settings.signal}
         email={settings.email}
