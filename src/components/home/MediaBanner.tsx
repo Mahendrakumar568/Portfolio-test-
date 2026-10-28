@@ -16,11 +16,11 @@ export const MediaBanner = ({ items }: { items: MediaItem[] }) => {
           const text = (
             <span className="flex items-baseline gap-5 whitespace-nowrap">
               {item.snippet && (
-                <span className="font-display text-[clamp(2rem,4vw,3.6rem)] italic leading-none tracking-[-0.02em] transition-colors group-hover:text-ember">
+                <span className="font-display text-[clamp(1.75rem,3.2vw,2.9rem)] italic leading-tight tracking-[-0.02em] transition-colors group-hover:text-ember">
                   &ldquo;{item.snippet}&rdquo;
                 </span>
               )}
-              <span className="text-sm uppercase tracking-[0.18em] text-night-soft">{item.label}</span>
+              <span className="text-base tracking-wide text-night-ink/70">{item.label}</span>
             </span>
           );
           // A logo sits in a fixed chip beside its name and quote, so no item loses its words.
