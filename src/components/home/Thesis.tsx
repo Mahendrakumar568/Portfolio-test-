@@ -4,13 +4,7 @@ import { useRef } from "react";
 import { gsap, useDeferredGSAP } from "@/lib/gsap";
 import { Folio } from "./Folio";
 
-const STATEMENTS = [
-  "An idea is a hypothesis about people. It becomes real only when it survives contact with a market.",
-  "Most breakthroughs are borrowed: a solution mastered in one place, carried to where nobody expected it.",
-  "Strategy is choosing which promises to make. Execution is keeping them, on time.",
-];
-
-export const Thesis = () => {
+export const Thesis = ({ statements }: { statements: string[] }) => {
   const root = useRef<HTMLElement>(null);
 
   useDeferredGSAP(
@@ -44,7 +38,7 @@ export const Thesis = () => {
           </h2>
         </div>
         <div className="space-y-10 md:col-span-9">
-          {STATEMENTS.map((statement, i) => (
+          {statements.map((statement, i) => (
             <p key={i} className="font-display max-w-[24ch] text-[clamp(1.9rem,4.4vw,4.4rem)] leading-[1.06] tracking-[-0.02em]">
               {statement.split(" ").map((word, w) => (
                 <span key={w} data-word className="inline-block pr-[0.25em]">

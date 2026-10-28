@@ -3,15 +3,22 @@
 import Image from "next/image";
 import { useRef } from "react";
 import type { Signal } from "@/lib/types";
+import type { SiteCopy } from "@/lib/copy";
 import { gsap, useDeferredGSAP } from "@/lib/gsap";
 import { Folio } from "./Folio";
 
-type Props = { signal: Signal; email: string; linkedinUrl: string; newsletterUrl: string };
+type Props = {
+  copy: SiteCopy["home"];
+  signal: Signal;
+  email: string;
+  linkedinUrl: string;
+  newsletterUrl: string;
+};
 
-export const Contact = ({ signal, email, linkedinUrl, newsletterUrl }: Props) => {
+export const Contact = ({ copy, signal, email, linkedinUrl, newsletterUrl }: Props) => {
   const root = useRef<HTMLElement>(null);
   const signalOn = signal.mode !== "off";
-  const headline = signalOn ? "Let's start something." : "Let's talk ideas.";
+  const headline = signalOn ? copy.contactHeadlineSignal : copy.contactHeadline;
 
   useDeferredGSAP(
     () => {
@@ -51,9 +58,7 @@ export const Contact = ({ signal, email, linkedinUrl, newsletterUrl }: Props) =>
         <div className="mt-16 grid gap-12 md:grid-cols-12">
           <div className="md:col-span-5">
             <p className="max-w-[40ch] text-xl leading-relaxed">
-              {signalOn
-                ? signal.message
-                : "For collaborations, conversations about startups and strategy, or a reply to something in Rising Ideas."}
+              {signalOn ? signal.message : copy.contactLine}
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
               <Magnetic>
@@ -63,7 +68,7 @@ export const Contact = ({ signal, email, linkedinUrl, newsletterUrl }: Props) =>
                   rel="noreferrer"
                   className="inline-flex rounded-full bg-ink px-8 py-4 text-base text-paper transition-colors hover:bg-rising"
                 >
-                  {signalOn ? signal.ctaLabel : email ? "Write to Jithendra" : "Message on LinkedIn"}
+                  {signalOn ? signal.ctaLabel : email ? copy.writeLabel : copy.linkedinLabel}
                 </a>
               </Magnetic>
               <Magnetic>
@@ -73,7 +78,7 @@ export const Contact = ({ signal, email, linkedinUrl, newsletterUrl }: Props) =>
                   rel="noreferrer"
                   className="inline-flex rounded-full border border-ink/30 px-8 py-4 text-base transition-colors hover:border-ink"
                 >
-                  Read Rising Ideas
+                  {copy.readLabel}
                 </a>
               </Magnetic>
             </div>

@@ -10,6 +10,7 @@ import { Folio } from "./Folio";
 type Item = { slug: string; title: string; date: string; topic: string; editionNumber?: number; excerpt: string };
 
 type Props = {
+  copy: { intro: string; frequency: string; subscribeLabel: string };
   subscribers: number;
   editions: number;
   newsletterUrl: string;
@@ -17,7 +18,7 @@ type Props = {
   showingEditions: boolean;
 };
 
-export const RisingIdeas = ({ subscribers, editions, newsletterUrl, items, showingEditions }: Props) => {
+export const RisingIdeas = ({ copy, subscribers, editions, newsletterUrl, items, showingEditions }: Props) => {
   const root = useRef<HTMLElement>(null);
   const cover = useRef<HTMLDivElement>(null);
 
@@ -101,8 +102,7 @@ export const RisingIdeas = ({ subscribers, editions, newsletterUrl, items, showi
               Rising Ideas
             </h2>
             <p className="mt-6 max-w-[44ch] text-lg leading-relaxed text-night-ink/75">
-              A weekly newsletter on LinkedIn: insight and analysis at the intersection of technology, business,
-              geopolitics and the forces shaping what comes next.
+              {copy.intro}
             </p>
             <dl className="mt-12 grid grid-cols-3 gap-6 border-y border-night-ink/15 py-8">
               <div>
@@ -119,7 +119,7 @@ export const RisingIdeas = ({ subscribers, editions, newsletterUrl, items, showi
               </div>
               <div>
                 <dt className="text-sm text-night-soft">Published</dt>
-                <dd className="font-display mt-2 text-[clamp(2rem,4vw,3.5rem)] italic leading-none text-ember">weekly</dd>
+                <dd className="font-display mt-2 text-[clamp(2rem,4vw,3.5rem)] italic leading-none text-ember">{copy.frequency}</dd>
               </div>
             </dl>
             <a
@@ -129,7 +129,7 @@ export const RisingIdeas = ({ subscribers, editions, newsletterUrl, items, showi
               
               className="mt-10 inline-flex items-center gap-3 rounded-full bg-ember px-7 py-4 text-base font-medium text-night transition-transform duration-300 hover:scale-[1.03]"
             >
-              Subscribe on LinkedIn
+              {copy.subscribeLabel}
             </a>
           </div>
         </div>

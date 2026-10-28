@@ -18,9 +18,16 @@ export default async function Home() {
   return (
     <>
       <PersonSchema linkedinUrl={settings.linkedinUrl} mediumUrl={settings.mediumUrl} />
-      <Hero headline={settings.headline} thesis={settings.thesis} portrait={settings.portrait} />
-      <Thesis />
+      <Hero
+        headline={settings.headline}
+        thesis={settings.thesis}
+        portrait={settings.portrait}
+        editor={settings.copy.home.heroEditor}
+        role={settings.copy.home.heroRole}
+      />
+      <Thesis statements={settings.copy.home.statements} />
       <RisingIdeas
+        copy={{ intro: settings.copy.home.risingIntro, frequency: settings.copy.home.risingFrequency, subscribeLabel: settings.copy.home.subscribeLabel }}
         subscribers={settings.subscribers}
         editions={settings.editions}
         newsletterUrl={settings.newsletterUrl}
@@ -28,6 +35,7 @@ export default async function Home() {
         showingEditions={editions.length > 0}
       />
       <Contact
+        copy={settings.copy.home}
         signal={settings.signal}
         email={settings.email}
         linkedinUrl={settings.linkedinUrl}

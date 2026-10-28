@@ -31,6 +31,20 @@ export type SiteCopy = {
   /** Titles are fixed: each one links to its essay. Only the lines are editable. */
   lens: { subjects: { title: string; line: string }[] };
   book: { label: string; heading: string; body: string };
+  home: {
+    heroEditor: string;
+    heroRole: string;
+    statements: string[];
+    risingIntro: string;
+    risingFrequency: string;
+    subscribeLabel: string;
+    contactHeadline: string;
+    contactHeadlineSignal: string;
+    contactLine: string;
+    readLabel: string;
+    writeLabel: string;
+    linkedinLabel: string;
+  };
 };
 
 export const DEFAULT_COPY: SiteCopy = {
@@ -84,5 +98,24 @@ export const DEFAULT_COPY: SiteCopy = {
     label: "Work in progress",
     heading: "Something longer is being written.",
     body: "Not ready to show yet. When it is, it will be the first thing to read here.",
+  },
+  home: {
+    heroEditor: "Editor of Rising Ideas.",
+    heroRole: "Founder's Office at openCT.",
+    statements: [
+      "An idea is a hypothesis about people. It becomes real only when it survives contact with a market.",
+      "Most breakthroughs are borrowed: a solution mastered in one place, carried to where nobody expected it.",
+      "Strategy is choosing which promises to make. Execution is keeping them, on time.",
+    ],
+    risingIntro:
+      "A weekly newsletter on LinkedIn: insight and analysis at the intersection of technology, business, geopolitics and the forces shaping what comes next.",
+    risingFrequency: "weekly",
+    subscribeLabel: "Subscribe on LinkedIn",
+    contactHeadline: "Let's talk ideas.",
+    contactHeadlineSignal: "Let's start something.",
+    contactLine: "For collaborations, conversations about startups and strategy, or a reply to something in Rising Ideas.",
+    readLabel: "Read Rising Ideas",
+    writeLabel: "Write to Jithendra",
+    linkedinLabel: "Message on LinkedIn",
   },
 };

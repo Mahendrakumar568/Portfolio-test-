@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
-import { saveBookAction, saveCareerAction, saveLensAction, saveWorkAction, type FormState } from "@/app/admin/actions";
+import { saveBookAction, saveCareerAction, saveHomeAction, saveLensAction, saveWorkAction, type FormState } from "@/app/admin/actions";
 import type { SiteCopy } from "@/lib/copy";
 import { Field, Panel, SaveBar, Switch, inputClass } from "./ui";
 
@@ -150,6 +150,69 @@ export const BookForm = ({ book }: { book: SiteCopy["book"] }) => {
         </Field>
       </Panel>
       <SaveBar state={state} label="Save book" />
+    </form>
+  );
+};
+
+export const HomeForm = ({ home }: { home: SiteCopy["home"] }) => {
+  const [state, action] = useSave(saveHomeAction);
+  return (
+    <form action={action} className="space-y-6">
+      <Panel title="Opening" description="The headline and thesis are set on the Profile page. These are the lines beside them.">
+        <div className="grid gap-5 md:grid-cols-2">
+          <Field label="Editor line">
+            <input name="heroEditor" defaultValue={home.heroEditor} className={inputClass} />
+          </Field>
+          <Field label="Role line">
+            <input name="heroRole" defaultValue={home.heroRole} className={inputClass} />
+          </Field>
+        </div>
+      </Panel>
+      <Panel title="What I believe" description="Three statements, shown one after another as the reader scrolls.">
+        {[0, 1, 2].map((i) => (
+          <Field key={i} label={`Statement ${i + 1}`}>
+            <textarea name={`statement${i}`} defaultValue={home.statements[i]} rows={2} className={inputClass} />
+          </Field>
+        ))}
+      </Panel>
+      <Panel title="Rising Ideas">
+        <Field label="Introduction">
+          <textarea name="risingIntro" defaultValue={home.risingIntro} rows={3} className={inputClass} />
+        </Field>
+        <div className="grid gap-5 md:grid-cols-2">
+          <Field label="Publishing rhythm" hint="Shown in the third figure, e.g. weekly or fortnightly.">
+            <input name="risingFrequency" defaultValue={home.risingFrequency} className={inputClass} />
+          </Field>
+          <Field label="Subscribe button">
+            <input name="subscribeLabel" defaultValue={home.subscribeLabel} className={inputClass} />
+          </Field>
+        </div>
+      </Panel>
+      <Panel title="Conversation" description="The closing section. Its headline changes when the availability signal is on.">
+        <div className="grid gap-5 md:grid-cols-2">
+          <Field label="Headline">
+            <input name="contactHeadline" defaultValue={home.contactHeadline} className={inputClass + " font-display text-xl"} />
+          </Field>
+          <Field label="Headline while the signal is on">
+            <input name="contactHeadlineSignal" defaultValue={home.contactHeadlineSignal} className={inputClass + " font-display text-xl"} />
+          </Field>
+        </div>
+        <Field label="Line under the headline" hint="Hidden while the availability signal is on, which shows its own message instead.">
+          <textarea name="contactLine" defaultValue={home.contactLine} rows={3} className={inputClass} />
+        </Field>
+        <div className="grid gap-5 md:grid-cols-3">
+          <Field label="Write button">
+            <input name="writeLabel" defaultValue={home.writeLabel} className={inputClass} />
+          </Field>
+          <Field label="LinkedIn button" hint="Used when no email is set.">
+            <input name="linkedinLabel" defaultValue={home.linkedinLabel} className={inputClass} />
+          </Field>
+          <Field label="Rising Ideas button">
+            <input name="readLabel" defaultValue={home.readLabel} className={inputClass} />
+          </Field>
+        </div>
+      </Panel>
+      <SaveBar state={state} label="Save home" />
     </form>
   );
 };

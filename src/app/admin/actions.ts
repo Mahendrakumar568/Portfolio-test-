@@ -245,3 +245,22 @@ export const saveBookAction = async (_: FormState, form: FormData): Promise<Form
       body: text(form, "body"),
     },
   }));
+
+export const saveHomeAction = async (_: FormState, form: FormData): Promise<FormState> =>
+  saveCopy((copy) => ({
+    ...copy,
+    home: {
+      heroEditor: text(form, "heroEditor") || copy.home.heroEditor,
+      heroRole: text(form, "heroRole") || copy.home.heroRole,
+      statements: [0, 1, 2].map((i) => text(form, `statement${i}`) || copy.home.statements[i] || ""),
+      risingIntro: text(form, "risingIntro") || copy.home.risingIntro,
+      risingFrequency: text(form, "risingFrequency") || copy.home.risingFrequency,
+      subscribeLabel: text(form, "subscribeLabel") || copy.home.subscribeLabel,
+      contactHeadline: text(form, "contactHeadline") || copy.home.contactHeadline,
+      contactHeadlineSignal: text(form, "contactHeadlineSignal") || copy.home.contactHeadlineSignal,
+      contactLine: text(form, "contactLine"),
+      readLabel: text(form, "readLabel") || copy.home.readLabel,
+      writeLabel: text(form, "writeLabel") || copy.home.writeLabel,
+      linkedinLabel: text(form, "linkedinLabel") || copy.home.linkedinLabel,
+    },
+  }));

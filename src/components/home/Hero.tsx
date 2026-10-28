@@ -6,7 +6,7 @@ import { gsap, useGSAP, prefersReducedMotion } from "@/lib/gsap";
 import { INTRO_DONE } from "@/components/site/Preloader";
 import { scrollToTarget } from "@/components/site/SmoothScroll";
 
-type Props = { headline: string; thesis: string; portrait?: string };
+type Props = { headline: string; thesis: string; portrait?: string; editor: string; role: string };
 
 const seeded = (i: number) => {
   const x = Math.sin(i * 9301 + 49297) * 233280;
@@ -24,7 +24,7 @@ const STARS = Array.from({ length: 48 }, (_, i) => ({
  * The sun climbs, the sky lifts away upward, the words are revealed in the
  * first light, and the outcome is underlined in ember.
  */
-export const Hero = ({ headline, thesis, portrait }: Props) => {
+export const Hero = ({ headline, thesis, portrait, editor, role }: Props) => {
   const root = useRef<HTMLElement>(null);
   const lines = splitHeadline(headline);
 
@@ -178,9 +178,9 @@ export const Hero = ({ headline, thesis, portrait }: Props) => {
 
       <div className="relative z-[2] mx-auto flex w-full max-w-[1440px] flex-1 flex-col">
         <p data-hero-fade className="max-w-xs text-sm text-ink-soft">
-          Editor of <span className="font-display italic text-ink">Rising Ideas</span>.
+          {editor}
           <br />
-          Founder&rsquo;s Office at openCT.
+          {role}
         </p>
 
         <h1
