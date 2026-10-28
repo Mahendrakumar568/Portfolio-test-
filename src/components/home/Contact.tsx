@@ -4,7 +4,6 @@ import Image from "next/image";
 import { useRef } from "react";
 import type { Signal } from "@/lib/types";
 import { gsap, useDeferredGSAP } from "@/lib/gsap";
-import { play } from "@/lib/sound";
 import { Folio } from "./Folio";
 
 type Props = { signal: Signal; email: string; linkedinUrl: string; newsletterUrl: string };
@@ -62,7 +61,6 @@ export const Contact = ({ signal, email, linkedinUrl, newsletterUrl }: Props) =>
                   href={writeHref}
                   target={email ? undefined : "_blank"}
                   rel="noreferrer"
-                  onClick={() => play("chime")}
                   className="inline-flex rounded-full bg-ink px-8 py-4 text-base text-paper transition-colors hover:bg-rising"
                 >
                   {signalOn ? signal.ctaLabel : email ? "Write to Jithendra" : "Message on LinkedIn"}

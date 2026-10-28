@@ -4,7 +4,6 @@ import Image from "next/image";
 import { useRef } from "react";
 import { gsap, useGSAP, prefersReducedMotion } from "@/lib/gsap";
 import { INTRO_DONE } from "@/components/site/Preloader";
-import { play } from "@/lib/sound";
 
 type Props = { headline: string; thesis: string; portrait?: string };
 
@@ -51,13 +50,11 @@ export const Hero = ({ headline, thesis, portrait }: Props) => {
               duration: 1.5,
               ease: "expo.out",
               stagger: { each: 0.035, from: "random" },
-              onStart: () => play("whoosh"),
             },
             0.1,
           )
           .to(frame, { clipPath: "inset(0% 0% 0% 0%)", duration: 1.3, ease: "expo.inOut" }, 0.7)
           .to(fades, { opacity: 1, y: 0, duration: 0.9, stagger: 0.1, ease: "power3.out" }, 1.0);
-        letters.forEach((_, i) => tl.call(() => play("press"), [], 0.55 + i * 0.035));
       };
 
       if ((window as unknown as { __introDone?: boolean }).__introDone) assemble();

@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useRef } from "react";
 import type { Signal } from "@/lib/types";
 import { gsap, useGSAP, prefersReducedMotion } from "@/lib/gsap";
-import { play } from "@/lib/sound";
 
 /** The featured availability signal: a horizon line with a sun rising over it. */
 export const HorizonBanner = ({ signal }: { signal: Signal }) => {
@@ -30,7 +29,6 @@ export const HorizonBanner = ({ signal }: { signal: Signal }) => {
         </div>
         <Link
           href="/#contact"
-          onClick={() => play("chime")}
           className="shrink-0 rounded-full border border-paper/25 px-3 py-0.5 text-[12px] transition-colors hover:border-ember hover:bg-ember hover:text-ink"
         >
           {signal.ctaLabel}

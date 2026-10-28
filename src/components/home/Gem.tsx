@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { play } from "@/lib/sound";
 
 /*
  * A slowly turning cut gem for the stealth venture. three.js loads only when
@@ -109,7 +108,6 @@ export const Gem = () => {
       const card = el.closest("[data-jewel]") ?? el;
       const enter = () => {
         hover = 1;
-        play("crystal");
       };
       const leave = () => (hover = 0);
       card.addEventListener("pointerenter", enter);

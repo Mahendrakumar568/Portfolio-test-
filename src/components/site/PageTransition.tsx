@@ -3,7 +3,6 @@
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { gsap, ScrollTrigger, prefersReducedMotion } from "@/lib/gsap";
-import { play } from "@/lib/sound";
 
 /*
  * A curtain in the accent colour wipes up over the page on internal
@@ -43,7 +42,6 @@ export const PageTransition = () => {
       e.stopPropagation();
       covering.current = true;
       window.__pendingHash = url.hash || undefined;
-      play("whoosh");
       gsap.fromTo(
         curtain.current,
         { yPercent: 100, display: "block" },

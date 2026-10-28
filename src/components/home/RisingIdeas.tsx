@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useRef } from "react";
 import { gsap, useDeferredGSAP } from "@/lib/gsap";
-import { play } from "@/lib/sound";
 import { formatDate } from "@/lib/format";
 import { RisingCover } from "./RisingCover";
 import { Folio } from "./Folio";
@@ -27,7 +26,6 @@ export const RisingIdeas = ({ subscribers, editions, newsletterUrl, items, showi
       gsap.utils.toArray<HTMLElement>("[data-count-to]").forEach((el) => {
         const target = Number(el.dataset.countTo);
         const state = { value: 0 };
-        let shown = 0;
         gsap.to(state, {
           value: target,
           duration: 2.2,
@@ -35,8 +33,6 @@ export const RisingIdeas = ({ subscribers, editions, newsletterUrl, items, showi
           scrollTrigger: { trigger: el, start: "top 85%" },
           onUpdate: () => {
             const next = Math.round(state.value);
-            if (next !== shown && next % Math.max(1, Math.round(target / 18)) === 0) play("tick");
-            shown = next;
             el.textContent = next.toLocaleString("en-IN");
           },
         });
@@ -86,7 +82,6 @@ export const RisingIdeas = ({ subscribers, editions, newsletterUrl, items, showi
               data-cursor="Subscribe"
               onPointerMove={tilt}
               onPointerLeave={untilt}
-              onPointerEnter={() => play("page")}
               className="relative mx-auto aspect-square w-full max-w-[460px] overflow-hidden rounded-[3px] shadow-[0_40px_80px_-20px_rgba(0,0,0,.7),0_0_0_1px_rgba(255,255,255,.04)] [transform-style:preserve-3d]"
             >
               <a href={newsletterUrl} target="_blank" rel="noreferrer" aria-label="Subscribe to Rising Ideas on LinkedIn">
@@ -131,7 +126,7 @@ export const RisingIdeas = ({ subscribers, editions, newsletterUrl, items, showi
               href={newsletterUrl}
               target="_blank"
               rel="noreferrer"
-              onClick={() => play("chime")}
+              
               className="mt-10 inline-flex items-center gap-3 rounded-full bg-ember px-7 py-4 text-base font-medium text-night transition-transform duration-300 hover:scale-[1.03]"
             >
               Subscribe on LinkedIn
@@ -148,7 +143,7 @@ export const RisingIdeas = ({ subscribers, editions, newsletterUrl, items, showi
                   <Link
                     href={`/writing/${item.slug}`}
                     data-cursor="Read"
-                    onMouseEnter={() => play("page")}
+                    
                     className="group grid gap-2 py-7 md:grid-cols-12 md:items-baseline md:gap-6"
                   >
                     <span className="tabular text-sm text-night-soft md:col-span-2">

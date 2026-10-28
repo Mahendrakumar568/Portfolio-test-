@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useRef, useState } from "react";
 import { gsap, useDeferredGSAP } from "@/lib/gsap";
-import { play } from "@/lib/sound";
 import { formatDate } from "@/lib/format";
 import { Folio } from "./Folio";
 
@@ -56,7 +55,6 @@ export const SelectedWriting = ({ essays }: { essays: Essay[] }) => {
                 data-cursor="Read"
                 onPointerEnter={() => {
                   setActive(essay);
-                  play("page");
                 }}
                 className="group grid gap-2 py-8 md:grid-cols-12 md:items-baseline md:gap-6"
               >

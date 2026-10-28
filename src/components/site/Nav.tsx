@@ -4,8 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import type { Signal } from "@/lib/types";
-import { SoundToggle } from "./SoundToggle";
-import { play } from "@/lib/sound";
 import { NAVIGATE } from "./PageTransition";
 
 const LINKS = [
@@ -57,7 +55,6 @@ export const Nav = ({ signal }: { signal: Signal }) => {
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  onMouseEnter={() => play("tick")}
                   className={`relative after:absolute after:-bottom-1 after:left-0 after:h-px after:w-full after:origin-right after:scale-x-0 after:bg-current after:transition-transform after:duration-500 hover:after:origin-left hover:after:scale-x-100 ${
                     pathname.startsWith("/writing") && link.href === "/writing" ? "after:scale-x-100" : ""
                   }`}
@@ -67,7 +64,6 @@ export const Nav = ({ signal }: { signal: Signal }) => {
               </li>
             ))}
           </ul>
-          <SoundToggle />
           <button
             type="button"
             onClick={() => setMenuOpen((v) => !v)}

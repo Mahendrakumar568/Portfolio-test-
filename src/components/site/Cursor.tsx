@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "@/lib/gsap";
-import { play } from "@/lib/sound";
 
 /*
  * A small ink dot that follows the pointer and opens into a labelled disc over
@@ -32,7 +31,6 @@ export const Cursor = () => {
       setLabel(next ?? "");
       const size = next ? 84 : next === "" ? 36 : 10;
       gsap.to(el, { width: size, height: size, duration: 0.45, ease: "expo.out" });
-      if (next) play("tick");
     };
     const leave = () => gsap.to(el, { opacity: 0, duration: 0.3 });
     window.addEventListener("pointermove", move);

@@ -2,7 +2,7 @@
 
 The personal site of Jithendra Sai Kilaru, with a built-in admin panel for publishing Rising Ideas editions and essays.
 
-Next.js 16 (App Router), TypeScript, Tailwind CSS 4, GSAP with ScrollTrigger, Lenis smooth scrolling and three.js for the stealth venture gem. Sound is synthesised in the browser with the Web Audio API and stays off until a visitor turns it on.
+Next.js 16 (App Router), TypeScript, Tailwind CSS 4, GSAP with ScrollTrigger, Lenis smooth scrolling and three.js for the stealth venture gem.
 
 ## Run it
 

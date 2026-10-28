@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useRef } from "react";
 import { gsap, useDeferredGSAP } from "@/lib/gsap";
-import { play } from "@/lib/sound";
 import { Folio } from "./Folio";
 
 type Panel = { title: string; line: string; essay?: { title: string; href: string }; figure: React.ReactNode };
@@ -85,7 +84,6 @@ export const Lens = ({ essayLinks }: { essayLinks: Record<string, { title: strin
             onUpdate: (self) => {
               const next = Math.min(panels.length - 1, Math.round(self.progress * (panels.length - 1)));
               if (next !== active) {
-                if (active !== -1) play("whoosh");
                 active = next;
               }
             },

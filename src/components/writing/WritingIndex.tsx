@@ -5,7 +5,6 @@ import { useMemo, useRef, useState } from "react";
 import { TOPICS, type Topic } from "@/lib/types";
 import { formatDate } from "@/lib/format";
 import { gsap, useGSAP, prefersReducedMotion } from "@/lib/gsap";
-import { play } from "@/lib/sound";
 
 type Item = {
   slug: string;
@@ -52,14 +51,14 @@ export const WritingIndex = ({ items }: { items: Item[] }) => {
       <div className="flex flex-col gap-4 border-b border-ink/20 pb-8 md:flex-row md:items-center md:justify-between">
         <div className="flex flex-wrap gap-2" role="group" aria-label="Filter by kind">
           {KINDS.map((k) => (
-            <button key={k.value} type="button" aria-pressed={kind === k.value} className={chip(kind === k.value)} onClick={() => { setKind(k.value); play("tick"); }}>
+            <button key={k.value} type="button" aria-pressed={kind === k.value} className={chip(kind === k.value)} onClick={() => setKind(k.value)}>
               {k.label}
             </button>
           ))}
         </div>
         <div className="flex flex-wrap gap-2" role="group" aria-label="Filter by topic">
           {(["all", ...TOPICS] as const).map((t) => (
-            <button key={t} type="button" aria-pressed={topic === t} className={chip(topic === t)} onClick={() => { setTopic(t); play("tick"); }}>
+            <button key={t} type="button" aria-pressed={topic === t} className={chip(topic === t)} onClick={() => setTopic(t)}>
               {t === "all" ? "All topics" : t === "Geopolitics" ? "Geopolitics and politics" : t}
             </button>
           ))}
@@ -72,7 +71,6 @@ export const WritingIndex = ({ items }: { items: Item[] }) => {
             <Link
               href={`/writing/${item.slug}`}
               data-cursor="Read"
-              onMouseEnter={() => play("page")}
               className="group grid gap-3 py-9 md:grid-cols-12 md:gap-6"
             >
               <div className="text-sm text-ink-soft md:col-span-2">
