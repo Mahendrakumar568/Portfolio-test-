@@ -1,0 +1,15 @@
+{
+  "id": "ce2505c2-4d7d-486b-b1d2-8076c80f4c38",
+  "slug": "wand-and-block-max-wand-efficient-algorithms-for-top-k-document-retrieval",
+  "kind": "essay",
+  "title": "WAND and Block-Max WAND: Efficient Algorithms for Top-k Document Retrieval",
+  "date": "2025-10-31",
+  "topic": "Technology",
+  "excerpt": "A paper-style explainer of how search engines find the top results without scoring every document.",
+  "body": "",
+  "externalUrl": "https://medium.com/@jithendrasaikilaru/wand-and-block-max-wand-efficient-algorithms-for-top-k-document-retrieval-5dfca4b84499",
+  "externalLabel": "Medium",
+  "featured": true,
+  "published": true,
+  "updatedAt": "2026-10-28T13:28:59.043Z"
+}

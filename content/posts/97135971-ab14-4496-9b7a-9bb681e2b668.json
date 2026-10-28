@@ -1,0 +1,16 @@
+{
+  "id": "97135971-ab14-4496-9b7a-9bb681e2b668",
+  "slug": "example-edition",
+  "kind": "edition",
+  "editionNumber": 85,
+  "title": "Example edition: replace me",
+  "date": "2026-10-28",
+  "topic": "Business",
+  "excerpt": "A draft that shows how an edition looks. Edit it or delete it.",
+  "body": "Write or paste the edition here. Markdown works: **bold**, *italic*, [links](https://example.com), lists and quotes.\n\n> A pull quote looks like this.",
+  "externalUrl": "",
+  "externalLabel": "LinkedIn",
+  "featured": false,
+  "published": false,
+  "updatedAt": "2026-10-28T13:28:59.043Z"
+}

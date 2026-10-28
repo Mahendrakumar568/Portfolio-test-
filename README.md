@@ -1,36 +1,34 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Jithendra Sai Kilaru: portfolio and Rising Ideas
 
-## Getting Started
+The personal site of Jithendra Sai Kilaru, with a built-in admin panel for publishing Rising Ideas editions and essays.
 
-First, run the development server:
+Next.js 16 (App Router), TypeScript, Tailwind CSS 4, GSAP with ScrollTrigger, Lenis smooth scrolling and three.js for the stealth venture gem. Sound is synthesised in the browser with the Web Audio API and stays off until a visitor turns it on.
+
+## Run it
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+cp .env.example .env.local   # then set ADMIN_PASSWORD and ADMIN_SECRET
+npm run dev                  # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The admin panel is at `/admin`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## What the admin panel controls
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Writing**: Rising Ideas editions and essays. Markdown body with live preview, cover image, topic, featured flag, draft or published, and a link to where a piece was first published. A piece with no body shows its summary and a link to the original.
+- **Availability signal**: Off, a small sun beside his name, or a sunrise banner across the top. His own words, a button label and an optional end date. The site never prints "open to".
+- **Stealth venture**: the sealed "precious jewel" card, with a Reveal switch that swaps in the venture's name, summary and link.
+- **Profile and numbers**: subscriber and edition counts, the hero headline and thesis, portrait, bio and links.
 
-## Learn More
+## Content storage
 
-To learn more about Next.js, take a look at the following resources:
+Content lives in `content/` as JSON (`settings.json`, `posts/*.json`), and uploaded images go to `content/uploads/`, served from `/media/...`. This needs no database or third-party account, and works anywhere with a writable disk.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Before deploying to a read-only host such as Vercel, swap `src/lib/store.ts` and the upload route for a hosted store (for example Vercel Blob for images and a small database or Git-backed store for JSON). Nothing else in the app reads the disk directly.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+`node scripts/seed.mjs` rewrites `content/` with the starter content. It overwrites existing posts.
 
-## Deploy on Vercel
+## Images
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Source photos are in `assets-src/`. The lightly retouched versions used on the site are in `public/images/`.
