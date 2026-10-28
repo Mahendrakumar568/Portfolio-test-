@@ -71,7 +71,7 @@ export const BookHint = ({ book }: { book: SiteCopy["book"] }) => {
           <div
             data-spot
             aria-hidden
-            className="pointer-events-none absolute inset-x-[10%] top-[-6%] h-[70%] rounded-full opacity-60 blur-2xl"
+            className="pointer-events-none absolute inset-x-[10%] top-[-6%] h-[70%] rounded-full opacity-60"
             style={{ background: "radial-gradient(closest-side, rgba(232,119,46,.45), transparent 70%)" }}
           />
 
@@ -96,13 +96,10 @@ export const BookHint = ({ book }: { book: SiteCopy["book"] }) => {
                   <stop offset="0.7" stopColor="#9a2118" />
                   <stop offset="1" stopColor="#3d0a07" />
                 </linearGradient>
-                <filter id="book-soft" x="-20%" y="-20%" width="140%" height="140%">
-                  <feGaussianBlur stdDeviation="2.5" />
-                </filter>
               </defs>
 
               {/* Floor shadow */}
-              <ellipse cx="150" cy="356" rx="128" ry="14" fill="#000" opacity="0.7" filter="url(#book-soft)" />
+              <ellipse cx="150" cy="356" rx="128" ry="14" fill="#000" opacity="0.6" />
 
               {/* Pedestal */}
               <path d="M96 300 L204 300 L214 352 L86 352 Z" fill="url(#book-column)" />
@@ -118,17 +115,17 @@ export const BookHint = ({ book }: { book: SiteCopy["book"] }) => {
                 />
                 {/* Creases where the cloth pulls tight over the book's edges */}
                 <g fill="none" strokeLinecap="round">
-                  <path d="M92 150 C 90 200, 92 250, 92 286" stroke="#2a0503" strokeWidth="6" opacity="0.6" filter="url(#book-soft)" />
+                  <path d="M92 150 C 90 200, 92 250, 92 286" stroke="#2a0503" strokeWidth="6" opacity="0.6" />
                   <path d="M100 152 C 98 200, 100 250, 100 282" stroke="#ffb1a0" strokeWidth="1.6" opacity="0.3" />
-                  <path d="M150 140 C 149 170, 151 200, 150 236" stroke="#2a0503" strokeWidth="4" opacity="0.35" filter="url(#book-soft)" />
-                  <path d="M208 150 C 210 200, 208 250, 208 286" stroke="#2a0503" strokeWidth="6" opacity="0.6" filter="url(#book-soft)" />
+                  <path d="M150 140 C 149 170, 151 200, 150 236" stroke="#2a0503" strokeWidth="4" opacity="0.35" />
+                  <path d="M208 150 C 210 200, 208 250, 208 286" stroke="#2a0503" strokeWidth="6" opacity="0.6" />
                   <path d="M200 152 C 202 200, 200 250, 200 282" stroke="#ffb1a0" strokeWidth="1.6" opacity="0.28" />
-                  <path d="M84 186 Q 118 194 150 186 Q 182 194 216 186" stroke="#2a0503" strokeWidth="3" opacity="0.35" filter="url(#book-soft)" />
+                  <path d="M84 186 Q 118 194 150 186 Q 182 194 216 186" stroke="#2a0503" strokeWidth="3" opacity="0.35" />
                 </g>
                 {/* Top edge catches the light */}
-                <path d="M96 150 Q 150 140 204 150" fill="none" stroke="#ffd9cc" strokeWidth="2" opacity="0.3" filter="url(#book-soft)" />
+                <path d="M96 150 Q 150 140 204 150" fill="none" stroke="#ffd9cc" strokeWidth="2" opacity="0.3" />
                 {/* Light catching the crown of the cloth */}
-                <ellipse cx="150" cy="136" rx="46" ry="12" fill="#ffd9cc" opacity="0.16" filter="url(#book-soft)" />
+                <ellipse cx="150" cy="136" rx="46" ry="12" fill="#ffd9cc" opacity="0.16" />
               </g>
             </svg>
           </div>

@@ -200,25 +200,36 @@ export const Lens = ({ essayLinks, subjects }: { essayLinks: Record<string, Essa
                     <stop offset="0.4" stopColor="#8ff0ff" stopOpacity="0.8" />
                     <stop offset="1" stopColor="#8ff0ff" stopOpacity="0" />
                   </radialGradient>
-                  <filter id="lens-glow" x="-50%" y="-50%" width="200%" height="200%">
-                    <feGaussianBlur stdDeviation="4" result="blur" />
-                    <feMerge>
-                      <feMergeNode in="blur" />
-                      <feMergeNode in="SourceGraphic" />
-                    </feMerge>
-                  </filter>
-                  <filter id="lens-bloom" x="-100%" y="-100%" width="300%" height="300%">
-                    <feGaussianBlur stdDeviation="14" />
-                  </filter>
+                  <radialGradient id="lens-floor">
+                    <stop offset="0" stopColor="#c8f35a" stopOpacity="0.45" />
+                    <stop offset="1" stopColor="#c8f35a" stopOpacity="0" />
+                  </radialGradient>
+                  <radialGradient id="lens-halo">
+                    <stop offset="0" stopColor="#ffffff" stopOpacity="0.5" />
+                    <stop offset="1" stopColor="#ffffff" stopOpacity="0" />
+                  </radialGradient>
                 </defs>
 
-                <ellipse cx="205" cy="208" rx="120" ry="18" fill="#c8f35a" opacity="0.4" filter="url(#lens-bloom)" />
+                <ellipse cx="205" cy="208" rx="150" ry="40" fill="url(#lens-floor)" />
                 <path d="M190 52 L268 196 L112 196 Z" fill="url(#lens-body)" />
-                <ellipse cx="200" cy="168" rx="46" ry="30" fill="url(#lens-core)" filter="url(#lens-bloom)" />
+                <ellipse cx="200" cy="168" rx="46" ry="30" fill="url(#lens-core)" />
 
-                <g filter="url(#lens-glow)">
+                <g>
                   <path data-beam d="M16 138 L146 138" fill="none" stroke="#bff6ff" strokeWidth={1.8} vectorEffect="non-scaling-stroke" />
                   <path data-beam d="M190 52 L268 196 L112 196 Z" fill="none" stroke="#9fe9ff" strokeWidth={1.6} vectorEffect="non-scaling-stroke" />
+                  {RAY_ENDS.map((end, i) => (
+                    <path
+                      key={`halo-${i}`}
+                      d={`M${EXIT.x} ${EXIT.y} L${end.x} ${end.y}`}
+                      fill="none"
+                      stroke={RAY_COLORS[i]}
+                      strokeWidth={i === active ? 12 : 0}
+                      strokeOpacity={0.18}
+                      strokeLinecap="round"
+                      vectorEffect="non-scaling-stroke"
+                      className="transition-[stroke-width] duration-500"
+                    />
+                  ))}
                   {RAY_ENDS.map((end, i) => (
                     <path
                       key={i}
