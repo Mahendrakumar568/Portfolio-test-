@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRef, useState } from "react";
-import { gsap, useGSAP, prefersReducedMotion } from "@/lib/gsap";
+import { gsap, useDeferredGSAP } from "@/lib/gsap";
 import { play } from "@/lib/sound";
 import { formatDate } from "@/lib/format";
 import { Folio } from "./Folio";
@@ -14,9 +14,8 @@ export const SelectedWriting = ({ essays }: { essays: Essay[] }) => {
   const preview = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState<Essay | null>(null);
 
-  useGSAP(
+  useDeferredGSAP(
     () => {
-      if (prefersReducedMotion()) return;
       gsap.from("[data-essay]", {
         yPercent: 60,
         opacity: 0,
@@ -26,7 +25,7 @@ export const SelectedWriting = ({ essays }: { essays: Essay[] }) => {
         scrollTrigger: { trigger: "[data-essays]", start: "top 80%" },
       });
     },
-    { scope: root },
+    root,
   );
 
   const follow = (e: React.PointerEvent) => {

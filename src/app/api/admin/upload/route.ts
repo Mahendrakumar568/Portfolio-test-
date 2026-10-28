@@ -1,6 +1,7 @@
 import { promises as fs } from "fs";
 import path from "path";
 import { randomUUID } from "crypto";
+import { put } from "@vercel/blob";
 import { isSignedIn } from "@/lib/auth";
 
 const ALLOWED = new Map([
@@ -10,7 +11,11 @@ const ALLOWED = new Map([
 ]);
 const MAX_BYTES = 8 * 1024 * 1024;
 
-/** Saves an uploaded image to /content/uploads; it is served from /media. */
+/*
+ * Stores an uploaded image and returns its address. With a Vercel Blob token
+ * the image goes to Blob storage; otherwise it is saved to /content/uploads
+ * and served from /media.
+ */
 export const POST = async (request: Request) => {
   if (!(await isSignedIn())) return Response.json({ error: "Sign in again to upload." }, { status: 401 });
   const file = (await request.formData()).get("file");
@@ -20,6 +25,11 @@ export const POST = async (request: Request) => {
   if (file.size > MAX_BYTES) return Response.json({ error: "Images must be under 8 MB." }, { status: 400 });
 
   const name = `${randomUUID()}.${ext}`;
+  if (process.env.BLOB_READ_WRITE_TOKEN) {
+    const blob = await put(`uploads/${name}`, file, { access: "public", contentType: file.type });
+    return Response.json({ path: blob.url });
+  }
+
   const dir = path.join(process.cwd(), "content", "uploads");
   await fs.mkdir(dir, { recursive: true });
   await fs.writeFile(path.join(dir, name), Buffer.from(await file.arrayBuffer()));

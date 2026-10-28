@@ -21,6 +21,10 @@ export const Hero = ({ headline, thesis, portrait }: Props) => {
     () => {
       const letters = gsap.utils.toArray<HTMLElement>("[data-letter]");
       if (prefersReducedMotion()) return;
+      // Resolved now, inside the scope: the intro can finish after this setup has returned.
+      const fades = gsap.utils.toArray<HTMLElement>("[data-hero-fade]");
+      const frame = gsap.utils.toArray<HTMLElement>("[data-hero-portrait]");
+      const sun = gsap.utils.toArray<HTMLElement>("[data-hero-sun]");
 
       gsap.set(letters, {
         x: (i) => (seeded(i) - 0.5) * window.innerWidth * 0.9,
@@ -29,13 +33,13 @@ export const Hero = ({ headline, thesis, portrait }: Props) => {
         opacity: 0,
         scale: (i) => 0.6 + seeded(i + 3) * 1.2,
       });
-      gsap.set("[data-hero-fade]", { opacity: 0, y: 24 });
-      gsap.set("[data-hero-portrait]", { clipPath: "inset(100% 0% 0% 0%)" });
-      gsap.set("[data-hero-sun]", { yPercent: 60, opacity: 0 });
+      gsap.set(fades, { opacity: 0, y: 24 });
+      gsap.set(frame, { clipPath: "inset(100% 0% 0% 0%)" });
+      gsap.set(sun, { yPercent: 60, opacity: 0 });
 
       const assemble = () => {
         const tl = gsap.timeline();
-        tl.to("[data-hero-sun]", { yPercent: 0, opacity: 1, duration: 2.2, ease: "power3.out" }, 0)
+        tl.to(sun, { yPercent: 0, opacity: 1, duration: 2.2, ease: "power3.out" }, 0)
           .to(
             letters,
             {
@@ -51,8 +55,8 @@ export const Hero = ({ headline, thesis, portrait }: Props) => {
             },
             0.1,
           )
-          .to("[data-hero-portrait]", { clipPath: "inset(0% 0% 0% 0%)", duration: 1.3, ease: "expo.inOut" }, 0.7)
-          .to("[data-hero-fade]", { opacity: 1, y: 0, duration: 0.9, stagger: 0.1, ease: "power3.out" }, 1.0);
+          .to(frame, { clipPath: "inset(0% 0% 0% 0%)", duration: 1.3, ease: "expo.inOut" }, 0.7)
+          .to(fades, { opacity: 1, y: 0, duration: 0.9, stagger: 0.1, ease: "power3.out" }, 1.0);
         letters.forEach((_, i) => tl.call(() => play("press"), [], 0.55 + i * 0.035));
       };
 
@@ -76,7 +80,7 @@ export const Hero = ({ headline, thesis, portrait }: Props) => {
         const dx = e.clientX / window.innerWidth - 0.5;
         const dy = e.clientY / window.innerHeight - 0.5;
         gsap.to("[data-hero-lean]", { x: dx * 18, y: dy * 10, duration: 1.2, ease: "power3.out" });
-        gsap.to("[data-hero-sun]", { x: dx * -30, y: dy * -18, duration: 1.6, ease: "power3.out" });
+        gsap.to(sun, { x: dx * -30, y: dy * -18, duration: 1.6, ease: "power3.out" });
       };
       window.addEventListener("pointermove", lean);
       return () => {
@@ -119,7 +123,7 @@ export const Hero = ({ headline, thesis, portrait }: Props) => {
                   char === " " ? (
                     <span key={index} className="inline-block w-[0.22em]" />
                   ) : (
-                    <span key={index} data-letter className="font-display-wonk inline-block will-change-transform">
+                    <span key={index} data-letter className="inline-block will-change-transform">
                       {char}
                     </span>
                   ),
@@ -130,7 +134,7 @@ export const Hero = ({ headline, thesis, portrait }: Props) => {
         </h1>
 
         <div className="mt-auto grid grid-cols-1 items-end gap-8 pt-10 md:grid-cols-12">
-          <p data-hero-fade className="max-w-[34ch] text-lg leading-relaxed md:col-span-5 md:text-xl">
+          <p className="max-w-[34ch] text-lg leading-relaxed md:col-span-5 md:text-xl">
             {thesis}
           </p>
           <div data-hero-fade className="hidden items-center gap-3 text-sm text-ink-soft md:col-span-3 md:col-start-7 md:flex">

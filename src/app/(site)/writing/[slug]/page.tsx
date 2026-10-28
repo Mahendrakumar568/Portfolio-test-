@@ -7,6 +7,11 @@ import { renderMarkdown, estimateReadMinutes } from "@/lib/markdown";
 import { formatDate } from "@/lib/format";
 import { ReadingProgress } from "@/components/writing/ReadingProgress";
 
+// Pre-render published pieces; new ones render on first visit and refresh hourly.
+export const revalidate = 3600;
+
+export const generateStaticParams = async () => (await listPublishedPosts()).map((post) => ({ slug: post.slug }));
+
 export const generateMetadata = async ({ params }: PageProps<"/writing/[slug]">): Promise<Metadata> => {
   const post = await getPostBySlug((await params).slug);
   if (!post) return {};
@@ -36,7 +41,7 @@ export default async function PostPage({ params }: PageProps<"/writing/[slug]">)
           </Link>
           <span className="mx-2 text-rule">/</span>
           {post.kind === "edition" ? (
-            <span className="font-display italic text-rising">
+            <span className="font-display italic text-rising-ink">
               Rising Ideas{post.editionNumber ? ` No. ${post.editionNumber}` : ""}
             </span>
           ) : (

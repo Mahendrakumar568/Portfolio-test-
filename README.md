@@ -23,9 +23,18 @@ The admin panel is at `/admin`.
 
 ## Content storage
 
-Content lives in `content/` as JSON (`settings.json`, `posts/*.json`), and uploaded images go to `content/uploads/`, served from `/media/...`. This needs no database or third-party account, and works anywhere with a writable disk.
+Locally, content lives in `content/` as JSON (`settings.json`, `posts/*.json`). Images uploaded in the admin go to `content/uploads/` and are served from `/media/...`. This needs no database or account.
 
-Before deploying to a read-only host such as Vercel, swap `src/lib/store.ts` and the upload route for a hosted store (for example Vercel Blob for images and a small database or Git-backed store for JSON). Nothing else in the app reads the disk directly.
+For hosting on Vercel, whose disk is read-only, the site switches itself to hosted storage when these environment variables are set:
+
+- `KV_REST_API_URL` and `KV_REST_API_TOKEN` (Vercel's Redis integration, or Upstash): settings and posts are stored in Redis.
+- `BLOB_READ_WRITE_TOKEN` (Vercel Blob): images uploaded in the admin are stored in Blob.
+
+On the first deploy, copy the local content into Redis once:
+
+```bash
+node --env-file=.env.local scripts/push-content.mjs
+```
 
 `node scripts/seed.mjs` rewrites `content/` with the starter content. It overwrites existing posts.
 

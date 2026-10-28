@@ -70,7 +70,7 @@ export const RisingCover = ({ className = "" }: { className?: string }) => (
     <text x="28" y="74" fontFamily="var(--font-display), Georgia, serif" fontWeight="800" fontSize="44" fill="#2a1d10" letterSpacing="-1">
       RISING
     </text>
-    <text x="40" y="112" fontFamily="var(--font-display), Georgia, serif" fontStyle="italic" fontSize="38" fill="#2a1d10">
+    <text x="40" y="112" fontFamily="var(--font-display-italic), Georgia, serif" fontStyle="italic" fontSize="38" fill="#2a1d10">
       Ideas
     </text>
     <text fontFamily="var(--font-display), Georgia, serif" fontSize="11.5" fill="#3b2a17">

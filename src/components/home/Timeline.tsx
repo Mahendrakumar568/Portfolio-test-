@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useRef } from "react";
-import { gsap, useGSAP, prefersReducedMotion } from "@/lib/gsap";
+import { gsap, useDeferredGSAP } from "@/lib/gsap";
 import { Folio } from "./Folio";
 
 type Entry = { when: string; role: string; org: string; note?: string };
@@ -47,9 +47,8 @@ const YEARS: { year: string; entries: Entry[] }[] = [
 export const Timeline = () => {
   const root = useRef<HTMLElement>(null);
 
-  useGSAP(
+  useDeferredGSAP(
     () => {
-      if (prefersReducedMotion()) return;
       gsap.from("[data-spine]", {
         scaleY: 0,
         transformOrigin: "top",
@@ -77,7 +76,7 @@ export const Timeline = () => {
         scrollTrigger: { trigger: "[data-event-photo]", start: "top 80%" },
       });
     },
-    { scope: root },
+    root,
   );
 
   return (

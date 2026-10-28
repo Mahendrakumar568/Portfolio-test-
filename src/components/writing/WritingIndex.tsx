@@ -79,7 +79,7 @@ export const WritingIndex = ({ items }: { items: Item[] }) => {
                 <p className="tabular">{formatDate(item.date)}</p>
                 <p className="mt-1">
                   {item.kind === "edition" ? (
-                    <span className="font-display italic text-rising">Rising Ideas{item.editionNumber ? ` No. ${item.editionNumber}` : ""}</span>
+                    <span className="font-display italic text-rising-ink">Rising Ideas{item.editionNumber ? ` No. ${item.editionNumber}` : ""}</span>
                   ) : (
                     item.topic
                   )}

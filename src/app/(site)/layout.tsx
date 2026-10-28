@@ -5,6 +5,7 @@ import { Footer } from "@/components/site/Footer";
 import { SmoothScroll } from "@/components/site/SmoothScroll";
 import { Cursor } from "@/components/site/Cursor";
 import { Preloader } from "@/components/site/Preloader";
+import { PageTransition } from "@/components/site/PageTransition";
 
 export default async function SiteLayout({ children }: LayoutProps<"/">) {
   const settings = await getSettings();
@@ -13,6 +14,7 @@ export default async function SiteLayout({ children }: LayoutProps<"/">) {
       <Preloader />
       <SmoothScroll />
       <Cursor />
+      <PageTransition />
       {settings.signal.mode === "featured" && <HorizonBanner signal={settings.signal} />}
       <Nav signal={settings.signal} />
       <main>{children}</main>

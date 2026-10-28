@@ -12,9 +12,12 @@ export const Preloader = () => {
 
   useGSAP(
     () => {
-      const finish = () => {
+      const announce = () => {
         (window as unknown as { __introDone?: boolean }).__introDone = true;
         window.dispatchEvent(new Event(INTRO_DONE));
+      };
+      const finish = () => {
+        announce();
         setGone(true);
       };
       let seen = false;
@@ -22,27 +25,30 @@ export const Preloader = () => {
         seen = sessionStorage.getItem("ri-intro") === "1";
         sessionStorage.setItem("ri-intro", "1");
       } catch {}
-      if (seen || prefersReducedMotion()) return finish();
+      // Phones skip the count and go straight to the headline.
+      const small = !window.matchMedia("(min-width: 768px)").matches;
+      if (seen || small || prefersReducedMotion()) return finish();
 
       const counter = { value: 0 };
       const number = root.current!.querySelector<HTMLElement>("[data-count]")!;
       gsap
-        .timeline({ onComplete: finish })
+        .timeline({ onComplete: () => setGone(true) })
         .to(counter, {
           value: 100,
-          duration: 1.15,
+          duration: 0.9,
           ease: "power2.inOut",
           onUpdate: () => (number.textContent = String(Math.round(counter.value)).padStart(3, "0")),
         })
-        .from("[data-preload-line]", { scaleY: 0, duration: 1.15, ease: "power2.inOut" }, 0)
-        .to(root.current, { yPercent: -100, duration: 0.8, ease: "expo.inOut" }, "+=0.05");
+        .from("[data-preload-line]", { scaleY: 0, duration: 0.9, ease: "power2.inOut" }, 0)
+        .call(announce, [], "+=0.05")
+        .to(root.current, { yPercent: -100, duration: 0.8, ease: "expo.inOut" }, "<");
     },
     { scope: root },
   );
 
   if (gone) return null;
   return (
-    <div ref={root} aria-hidden className="fixed inset-0 z-[80] flex items-end justify-between bg-ink px-5 pb-6 text-paper md:px-10">
+    <div ref={root} aria-hidden className="fixed inset-0 z-[80] flex items-end max-md:hidden justify-between bg-ink px-5 pb-6 text-paper md:px-10">
       <span data-preload-line className="absolute left-1/2 top-0 h-full w-px origin-top bg-ember" />
       <span className="font-display text-sm italic text-paper/60">Rising Ideas</span>
       <span data-count className="tabular text-sm text-paper/60">

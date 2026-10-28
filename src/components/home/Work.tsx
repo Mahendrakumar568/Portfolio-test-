@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import type { StealthVenture } from "@/lib/types";
-import { gsap, useGSAP, prefersReducedMotion } from "@/lib/gsap";
+import { gsap, useDeferredGSAP } from "@/lib/gsap";
 import { Folio } from "./Folio";
 import { Gem } from "./Gem";
 
@@ -24,9 +24,8 @@ const PRACTICE = [
 export const Work = ({ stealth }: { stealth: StealthVenture }) => {
   const root = useRef<HTMLElement>(null);
 
-  useGSAP(
+  useDeferredGSAP(
     () => {
-      if (prefersReducedMotion()) return;
       gsap.from("[data-practice]", {
         y: 50,
         opacity: 0,
@@ -45,7 +44,7 @@ export const Work = ({ stealth }: { stealth: StealthVenture }) => {
         },
       );
     },
-    { scope: root },
+    root,
   );
 
   return (

@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import type { Signal } from "@/lib/types";
 import { SoundToggle } from "./SoundToggle";
 import { play } from "@/lib/sound";
+import { NAVIGATE } from "./PageTransition";
 
 const LINKS = [
   { href: "/#rising-ideas", label: "Rising Ideas" },
@@ -28,8 +29,13 @@ export const Nav = ({ signal }: { signal: Signal }) => {
       setSolid(y > 40);
       last.current = y;
     };
+    const closeMenu = () => setMenuOpen(false);
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener(NAVIGATE, closeMenu);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener(NAVIGATE, closeMenu);
+    };
   }, []);
 
   return (

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRef } from "react";
-import { gsap, useGSAP, prefersReducedMotion } from "@/lib/gsap";
+import { gsap, useDeferredGSAP } from "@/lib/gsap";
 import { play } from "@/lib/sound";
 import { formatDate } from "@/lib/format";
 import { RisingCover } from "./RisingCover";
@@ -22,9 +22,8 @@ export const RisingIdeas = ({ subscribers, editions, newsletterUrl, items, showi
   const root = useRef<HTMLElement>(null);
   const cover = useRef<HTMLDivElement>(null);
 
-  useGSAP(
+  useDeferredGSAP(
     () => {
-      if (prefersReducedMotion()) return;
       gsap.utils.toArray<HTMLElement>("[data-count-to]").forEach((el) => {
         const target = Number(el.dataset.countTo);
         const state = { value: 0 };
@@ -60,7 +59,7 @@ export const RisingIdeas = ({ subscribers, editions, newsletterUrl, items, showi
         scrollTrigger: { trigger: "[data-issues]", start: "top 80%" },
       });
     },
-    { scope: root },
+    root,
   );
 
   const tilt = (e: React.PointerEvent) => {

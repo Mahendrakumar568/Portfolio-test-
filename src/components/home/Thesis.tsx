@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { gsap, useGSAP, prefersReducedMotion } from "@/lib/gsap";
+import { gsap, useDeferredGSAP } from "@/lib/gsap";
 import { Folio } from "./Folio";
 
 const STATEMENTS = [
@@ -13,13 +13,13 @@ const STATEMENTS = [
 export const Thesis = () => {
   const root = useRef<HTMLElement>(null);
 
-  useGSAP(
+  useDeferredGSAP(
     () => {
-      if (prefersReducedMotion()) return;
       const words = gsap.utils.toArray<HTMLElement>("[data-word]");
-      gsap.set(words, { opacity: 0.14 });
+      // Unread words stay grey but legible (3:1 at this size), then turn to ink.
+      gsap.set(words, { color: "#8f897e" });
       gsap.to(words, {
-        opacity: 1,
+        color: "#161513",
         stagger: 0.12,
         ease: "none",
         scrollTrigger: {
@@ -31,7 +31,7 @@ export const Thesis = () => {
         },
       });
     },
-    { scope: root },
+    root,
   );
 
   return (

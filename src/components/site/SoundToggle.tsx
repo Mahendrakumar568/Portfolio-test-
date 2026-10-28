@@ -40,7 +40,7 @@ export const SoundToggle = ({ tone = "ink" }: { tone?: "ink" | "night" }) => {
           />
         ))}
       </span>
-      <span className="hidden sm:inline">{on ? "Sound on" : "Sound off"}</span>
+      <span className="sr-only sm:not-sr-only">{on ? "Sound on" : "Sound off"}</span>
       <style>{`@keyframes sound-bar { from { transform: scaleY(.25) } to { transform: scaleY(1) } }`}</style>
     </button>
   );

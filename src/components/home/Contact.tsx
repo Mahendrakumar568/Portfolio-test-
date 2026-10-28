@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useRef } from "react";
 import type { Signal } from "@/lib/types";
-import { gsap, useGSAP, prefersReducedMotion } from "@/lib/gsap";
+import { gsap, useDeferredGSAP } from "@/lib/gsap";
 import { play } from "@/lib/sound";
 import { Folio } from "./Folio";
 
@@ -14,9 +14,8 @@ export const Contact = ({ signal, email, linkedinUrl, newsletterUrl }: Props) =>
   const signalOn = signal.mode !== "off";
   const headline = signalOn ? "Let's start something." : "Let's talk ideas.";
 
-  useGSAP(
+  useDeferredGSAP(
     () => {
-      if (prefersReducedMotion()) return;
       gsap.fromTo(
         "[data-contact-headline]",
         { scale: 0.55, transformOrigin: "left bottom" },
@@ -33,7 +32,7 @@ export const Contact = ({ signal, email, linkedinUrl, newsletterUrl }: Props) =>
         scrollTrigger: { trigger: "[data-contact-photo]", start: "top 85%" },
       });
     },
-    { scope: root },
+    root,
   );
 
   const writeHref = email ? `mailto:${email}` : linkedinUrl;

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRef } from "react";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { gsap, useDeferredGSAP } from "@/lib/gsap";
 import { play } from "@/lib/sound";
 import { Folio } from "./Folio";
 
@@ -65,7 +65,7 @@ export const Lens = ({ essayLinks }: { essayLinks: Record<string, { title: strin
   const root = useRef<HTMLElement>(null);
   const track = useRef<HTMLDivElement>(null);
 
-  useGSAP(
+  useDeferredGSAP(
     () => {
       const mm = gsap.matchMedia();
       mm.add("(min-width: 768px) and (prefers-reduced-motion: no-preference)", () => {
@@ -108,7 +108,7 @@ export const Lens = ({ essayLinks }: { essayLinks: Record<string, { title: strin
       });
       return () => mm.revert();
     },
-    { scope: root },
+    root,
   );
 
   return (
