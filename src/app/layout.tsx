@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Fraunces, Inter_Tight, JetBrains_Mono } from "next/font/google";
+import { Caveat, Fraunces, Inter_Tight, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
 const display = Fraunces({ variable: "--font-display", subsets: ["latin"], axes: ["opsz"] });
@@ -14,6 +14,9 @@ const displayItalic = Fraunces({
 });
 
 const sans = Inter_Tight({ variable: "--font-sans", subsets: ["latin"] });
+
+// A handwritten face for margin notes only. It loads late, since it is never in the first view.
+const hand = Caveat({ variable: "--font-hand", subsets: ["latin"], weight: ["500"], preload: false });
 
 const mono = JetBrains_Mono({ variable: "--font-mono", subsets: ["latin"], weight: ["400", "500"], preload: false });
 
@@ -39,7 +42,7 @@ export const viewport: Viewport = { themeColor: "#F3EFE7" };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${display.variable} ${displayItalic.variable} ${sans.variable} ${mono.variable}`}>
+    <html lang="en" className={`${display.variable} ${displayItalic.variable} ${sans.variable} ${mono.variable} ${hand.variable}`}>
       <body>{children}</body>
     </html>
   );

@@ -17,6 +17,14 @@ type Item = {
   source?: string;
 };
 
+/** The margin note: the year and the first sentence of the essay, cut short. */
+const marginNote = (item: Item) => {
+  const year = item.date.slice(0, 4);
+  const first = item.excerpt.split(/(?<=[.!?])\s/)[0] ?? item.excerpt;
+  const takeaway = first.length > 84 ? `${first.slice(0, 81).trimEnd()}…` : first;
+  return `${year}. ${takeaway}`;
+};
+
 const KINDS = [
   { value: "all", label: "Everything" },
   { value: "edition", label: "Rising Ideas" },
@@ -91,13 +99,16 @@ export const WritingIndex = ({ items, topics }: { items: Item[]; topics: string[
                   )}
                 </p>
               </div>
-              <div className="md:col-span-8">
+              <div className="md:col-span-7">
                 <h2 className="font-display text-[clamp(1.6rem,2.6vw,2.4rem)] leading-[1.1] tracking-[-0.015em] transition-colors group-hover:text-rising">
                   {item.title}
                 </h2>
                 <p className="mt-3 max-w-[64ch] text-ink-soft">{item.excerpt}</p>
               </div>
-              {item.source && <p className="text-sm text-ink-soft md:col-span-2 md:text-right">First on {item.source}</p>}
+              <div className="md:col-span-3 md:text-right">
+                {item.source && <p className="text-sm text-ink-soft">First on {item.source}</p>}
+                <p className="font-hand mt-2 text-xl leading-snug text-rising-ink md:-rotate-2 md:text-right">{marginNote(item)}</p>
+              </div>
             </Link>
           </li>
         ))}
