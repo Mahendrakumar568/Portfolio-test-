@@ -12,7 +12,7 @@ import { Folio } from "./Folio";
 export const BookHint = () => {
   const root = useRef<HTMLElement>(null);
   const scene = useRef<HTMLDivElement>(null);
-  const cloth = useRef<HTMLDivElement>(null);
+  const cloth = useRef<SVGGElement>(null);
 
   useDeferredGSAP(
     () => {
@@ -31,7 +31,7 @@ export const BookHint = () => {
         },
       );
       gsap.to(scene.current, { rotateY: 14, duration: 7, yoyo: true, repeat: -1, ease: "sine.inOut" });
-      gsap.to(cloth.current, { scaleY: 1.025, scaleX: 0.99, duration: 3.4, yoyo: true, repeat: -1, ease: "sine.inOut", transformOrigin: "50% 100%" });
+      gsap.to(cloth.current, { scaleY: 1.02, duration: 3.4, yoyo: true, repeat: -1, ease: "sine.inOut", transformOrigin: "50% 100%" });
       gsap.to("[data-spot]", { opacity: 0.85, duration: 2.6, yoyo: true, repeat: -1, ease: "sine.inOut" });
 
       const tilt = (e: PointerEvent) => {
@@ -72,46 +72,61 @@ export const BookHint = () => {
           />
 
           <div ref={scene} className="absolute inset-0" style={{ transformStyle: "preserve-3d" }}>
-            {/* Pedestal */}
-            <div className="absolute bottom-[4%] left-1/2 h-[44%] w-[70%] -translate-x-1/2 rounded-b-[4px]" style={{ background: "linear-gradient(90deg, #2a2723 0%, #46403a 35%, #5b5349 55%, #2a2723 100%)", boxShadow: "0 40px 60px -20px rgba(0,0,0,.8)" }}>
-              <div className="absolute -top-[14px] left-[-6%] h-[28px] w-[112%] rounded-[50%]" style={{ background: "radial-gradient(ellipse at 50% 40%, #6a6258 0%, #3c3730 75%)" }} />
-            </div>
+            <svg viewBox="0 0 300 380" className="h-full w-full overflow-visible" aria-hidden>
+              <defs>
+                <linearGradient id="book-column" x1="0" x2="1">
+                  <stop offset="0" stopColor="#1d1b18" />
+                  <stop offset="0.35" stopColor="#4a443c" />
+                  <stop offset="0.6" stopColor="#5d554a" />
+                  <stop offset="1" stopColor="#1d1b18" />
+                </linearGradient>
+                <linearGradient id="book-cap" x1="0" x2="1">
+                  <stop offset="0" stopColor="#3a352f" />
+                  <stop offset="0.45" stopColor="#7a7165" />
+                  <stop offset="1" stopColor="#2b2823" />
+                </linearGradient>
+                <linearGradient id="book-cloth" x1="0" x2="1">
+                  <stop offset="0" stopColor="#3d0a07" />
+                  <stop offset="0.2" stopColor="#8f1d15" />
+                  <stop offset="0.45" stopColor="#d4453a" />
+                  <stop offset="0.7" stopColor="#9a2118" />
+                  <stop offset="1" stopColor="#3d0a07" />
+                </linearGradient>
+                <filter id="book-soft" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="2.5" />
+                </filter>
+              </defs>
 
-            {/* Cloth, draped over an unseen book */}
-            <div
-              ref={cloth}
-              className="absolute bottom-[40%] left-1/2 h-[62%] w-[66%] -translate-x-1/2 overflow-hidden"
-              style={{
-                borderRadius: "46% 46% 6% 6% / 34% 34% 4% 4%",
-                background:
-                  "linear-gradient(100deg, #4a0c08 0%, #9c1f17 16%, #d9473d 34%, #a8231a 50%, #6b1310 68%, #c0382c 84%, #4a0c08 100%)",
-                clipPath: "polygon(0% 0%, 100% 0%, 100% 86%, 93% 100%, 80% 90%, 66% 100%, 52% 88%, 38% 100%, 22% 90%, 10% 100%, 0% 88%)",
-                boxShadow: "0 30px 50px -18px rgba(0,0,0,.75), inset 0 0 40px rgba(0,0,0,.35)",
-              }}
-            >
-              {/* Folds */}
-              <span
-                aria-hidden
-                className="absolute inset-0 mix-blend-multiply"
-                style={{
-                  background:
-                    "repeating-linear-gradient(94deg, rgba(0,0,0,.32) 0 5px, rgba(255,255,255,.12) 9px 14px, transparent 18px 34px)",
-                }}
-              />
-              {/* Soft highlight on the crown of the cloth */}
-              <span
-                aria-hidden
-                className="absolute left-[18%] top-[6%] h-[40%] w-[46%] rounded-full opacity-70 blur-xl"
-                style={{ background: "radial-gradient(closest-side, rgba(255,220,200,.45), transparent 75%)" }}
-              />
-            </div>
+              {/* Floor shadow */}
+              <ellipse cx="150" cy="356" rx="128" ry="14" fill="#000" opacity="0.7" filter="url(#book-soft)" />
 
-            {/* Floor shadow */}
-            <div
-              aria-hidden
-              className="absolute bottom-[-2%] left-1/2 h-[7%] w-[84%] -translate-x-1/2 rounded-[50%] blur-md"
-              style={{ background: "rgba(0,0,0,.6)" }}
-            />
+              {/* Pedestal */}
+              <path d="M96 300 L204 300 L214 352 L86 352 Z" fill="url(#book-column)" />
+              <rect x="84" y="346" width="132" height="10" rx="2" fill="#2b2823" />
+              <rect x="74" y="284" width="152" height="18" rx="4" fill="url(#book-cap)" />
+              <ellipse cx="150" cy="284" rx="76" ry="5" fill="#8a8073" opacity="0.6" />
+
+              {/* Cloth draped over an unseen book */}
+              <g ref={cloth}>
+                <path
+                  d="M62 292 C 68 252, 74 200, 82 176 Q 88 150 118 146 Q 150 140 182 146 Q 212 150 218 176 C 226 200, 232 252, 238 292 Q 222 280 208 294 Q 192 282 150 296 Q 108 282 92 294 Q 78 280 62 292 Z"
+                                  fill="url(#book-cloth)"
+                />
+                {/* Creases where the cloth pulls tight over the book's edges */}
+                <g fill="none" strokeLinecap="round">
+                  <path d="M92 150 C 90 200, 92 250, 92 286" stroke="#2a0503" strokeWidth="6" opacity="0.6" filter="url(#book-soft)" />
+                  <path d="M100 152 C 98 200, 100 250, 100 282" stroke="#ffb1a0" strokeWidth="1.6" opacity="0.3" />
+                  <path d="M150 140 C 149 170, 151 200, 150 236" stroke="#2a0503" strokeWidth="4" opacity="0.35" filter="url(#book-soft)" />
+                  <path d="M208 150 C 210 200, 208 250, 208 286" stroke="#2a0503" strokeWidth="6" opacity="0.6" filter="url(#book-soft)" />
+                  <path d="M200 152 C 202 200, 200 250, 200 282" stroke="#ffb1a0" strokeWidth="1.6" opacity="0.28" />
+                  <path d="M84 186 Q 118 194 150 186 Q 182 194 216 186" stroke="#2a0503" strokeWidth="3" opacity="0.35" filter="url(#book-soft)" />
+                </g>
+                {/* Top edge catches the light */}
+                <path d="M96 150 Q 150 140 204 150" fill="none" stroke="#ffd9cc" strokeWidth="2" opacity="0.3" filter="url(#book-soft)" />
+                {/* Light catching the crown of the cloth */}
+                <ellipse cx="150" cy="136" rx="46" ry="12" fill="#ffd9cc" opacity="0.16" filter="url(#book-soft)" />
+              </g>
+            </svg>
           </div>
         </div>
       </div>

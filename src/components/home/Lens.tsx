@@ -70,6 +70,8 @@ const RAY_ENDS = [
   { x: 372, y: 176 },
   { x: 372, y: 244 },
 ];
+/** One colour per subject, so the split light reads as a spectrum. */
+const RAY_COLORS = ["#5ee6ff", "#d4f25c", "#b48cff", "#ff9d4d"];
 const AUTOPLAY_MS = 5200;
 
 /** Draws every stroke in a container from nothing to full. */
@@ -172,28 +174,65 @@ export const Lens = ({ essayLinks }: { essayLinks: Record<string, EssayLink> }) 
           </p>
 
           <div className="relative mx-auto mt-14 w-full max-w-[1100px]">
-            <svg
-              ref={prism}
-              viewBox={`0 0 ${VIEW.width} ${VIEW.height}`}
-              className="block h-auto w-full"
-              aria-hidden
+            <div
+              className="relative overflow-hidden rounded-[2rem] bg-night"
+              style={{
+                background:
+                  "radial-gradient(ellipse 70% 80% at 40% 55%, rgba(31,169,214,.38), transparent 70%), radial-gradient(ellipse 40% 30% at 50% 100%, rgba(200,243,90,.22), transparent 70%), #0e0f12",
+              }}
             >
-              <path data-beam d="M16 138 L146 138" {...stroke} stroke="#161513" strokeWidth={1.8} vectorEffect="non-scaling-stroke" />
-              <path data-beam d="M190 52 L268 196 L112 196 Z" {...stroke} stroke="#161513" strokeWidth={1.6} vectorEffect="non-scaling-stroke" />
-              {RAY_ENDS.map((end, i) => (
-                <path
-                  key={i}
-                  data-ray
-                  data-beam
-                  d={`M${EXIT.x} ${EXIT.y} L${end.x} ${end.y}`}
-                  fill="none"
-                  stroke={i === active ? "#e8772e" : "#c2410c"}
-                  strokeWidth={i === active ? 3.2 : 1}
-                  opacity={i === active ? 1 : 0.2}
-                  vectorEffect="non-scaling-stroke"
-                />
-              ))}
-            </svg>
+              <svg
+                ref={prism}
+                viewBox={`0 0 ${VIEW.width} ${VIEW.height}`}
+                className="block h-auto w-full"
+                aria-hidden
+              >
+                <defs>
+                  <linearGradient id="lens-body" x1="0" y1="0" x2="0.5" y2="1">
+                    <stop offset="0" stopColor="#e9fdff" stopOpacity="0.85" />
+                    <stop offset="0.45" stopColor="#4fd3ff" stopOpacity="0.6" />
+                    <stop offset="1" stopColor="#c8f35a" stopOpacity="0.55" />
+                  </linearGradient>
+                  <radialGradient id="lens-core">
+                    <stop offset="0" stopColor="#ffffff" stopOpacity="1" />
+                    <stop offset="0.4" stopColor="#8ff0ff" stopOpacity="0.8" />
+                    <stop offset="1" stopColor="#8ff0ff" stopOpacity="0" />
+                  </radialGradient>
+                  <filter id="lens-glow" x="-50%" y="-50%" width="200%" height="200%">
+                    <feGaussianBlur stdDeviation="4" result="blur" />
+                    <feMerge>
+                      <feMergeNode in="blur" />
+                      <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                  </filter>
+                  <filter id="lens-bloom" x="-100%" y="-100%" width="300%" height="300%">
+                    <feGaussianBlur stdDeviation="14" />
+                  </filter>
+                </defs>
+
+                <ellipse cx="205" cy="208" rx="120" ry="18" fill="#c8f35a" opacity="0.4" filter="url(#lens-bloom)" />
+                <path d="M190 52 L268 196 L112 196 Z" fill="url(#lens-body)" />
+                <ellipse cx="200" cy="168" rx="46" ry="30" fill="url(#lens-core)" filter="url(#lens-bloom)" />
+
+                <g filter="url(#lens-glow)">
+                  <path data-beam d="M16 138 L146 138" fill="none" stroke="#bff6ff" strokeWidth={1.8} vectorEffect="non-scaling-stroke" />
+                  <path data-beam d="M190 52 L268 196 L112 196 Z" fill="none" stroke="#9fe9ff" strokeWidth={1.6} vectorEffect="non-scaling-stroke" />
+                  {RAY_ENDS.map((end, i) => (
+                    <path
+                      key={i}
+                      data-ray
+                      data-beam
+                      d={`M${EXIT.x} ${EXIT.y} L${end.x} ${end.y}`}
+                      fill="none"
+                      stroke={RAY_COLORS[i]}
+                      strokeWidth={i === active ? 3.2 : 1}
+                      opacity={i === active ? 1 : 0.2}
+                      vectorEffect="non-scaling-stroke"
+                    />
+                  ))}
+                </g>
+              </svg>
+            </div>
 
             <div role="tablist" aria-label="Subjects" className="mt-8 grid gap-2 md:absolute md:inset-0 md:mt-0 md:block">
               {PANELS.map((item, i) => {
