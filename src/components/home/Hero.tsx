@@ -60,10 +60,11 @@ export const Hero = ({ headline, thesis, portrait }: Props) => {
           .to(sky, { clipPath: "inset(0% 0% 100% 0%)", duration: 2.4, ease: "expo.inOut" }, 1.0)
           .to(edge, { y: () => -(root.current?.offsetHeight ?? window.innerHeight), duration: 2.4, ease: "expo.inOut" }, 1.0)
           .to(stars, { opacity: 0, duration: 0.9, stagger: { each: 0.01, from: "random" } }, 1.6)
-          .to(lineEls[0], { clipPath: "inset(0% 0% 0% 0%)", duration: 1.8, ease: "expo.inOut" }, 1.9)
-          .to(lineEls[1], { clipPath: "inset(0% 0% 0% 0%)", duration: 1.8, ease: "expo.inOut" }, 2.4)
+          .to(lineEls[0], { clipPath: "inset(0% 0% 0% 0%)", duration: 1.8, ease: "expo.inOut", clearProps: "clipPath" }, 1.9)
+          .to(lineEls[1], { clipPath: "inset(0% 0% 0% 0%)", duration: 1.8, ease: "expo.inOut", clearProps: "clipPath" }, 2.4)
           .to(frame, { clipPath: "inset(0% 0% 0% 0%)", duration: 1.4, ease: "expo.inOut" }, 2.8)
           .to(fades, { opacity: 1, y: 0, duration: 1, stagger: 0.1, ease: "power3.out" }, 3.0)
+          .to(edge, { opacity: 0, duration: 0.5 }, 3.1)
           .to(underline, { scaleX: 1, duration: 1.2, ease: "expo.inOut" }, 3.6);
 
         // Once risen, the sun breathes slowly so the page never feels frozen.
@@ -85,6 +86,45 @@ export const Hero = ({ headline, thesis, portrait }: Props) => {
         scrollTrigger: { trigger: root.current, start: "top top", end: "bottom top", scrub: true },
       });
 
+      // Scroll: the two lines drift apart, so the headline opens up as you read on.
+      const scrollOpts = { trigger: root.current, start: "top top", end: "bottom top", scrub: true };
+      gsap.to(lineEls[0], { x: "6vw", ease: "none", scrollTrigger: scrollOpts });
+      gsap.to(lineEls[1], { x: "-8vw", ease: "none", scrollTrigger: scrollOpts });
+
+      // Pointer: letters are gently pushed away from the cursor, like light bending around them.
+      const glyphs = gsap.utils.toArray<HTMLElement>("[data-letter]");
+      let pointer = { x: -1e4, y: -1e4 };
+      let pending = 0;
+      const push = () => {
+        pending = 0;
+        for (const glyph of glyphs) {
+          const r = glyph.getBoundingClientRect();
+          const dx = r.left + r.width / 2 - pointer.x;
+          const dy = r.top + r.height / 2 - pointer.y;
+          const d = Math.hypot(dx, dy) || 1;
+          const force = Math.max(0, 1 - d / 180);
+          gsap.to(glyph, {
+            x: (dx / d) * force * 28,
+            y: (dy / d) * force * 18,
+            rotate: force * (dx > 0 ? 4 : -4),
+            duration: 0.6,
+            ease: "power3.out",
+            overwrite: "auto",
+          });
+        }
+      };
+      const onMove = (e: PointerEvent) => {
+        pointer = { x: e.clientX, y: e.clientY };
+        if (!pending) pending = requestAnimationFrame(push);
+      };
+
+      // Pointer: the portrait tilts toward the reader.
+      const tiltPortrait = (e: PointerEvent) => {
+        const dx = e.clientX / window.innerWidth - 0.5;
+        const dy = e.clientY / window.innerHeight - 0.5;
+        gsap.to(frame, { rotateY: dx * 14, rotateX: -dy * 10, transformPerspective: 900, duration: 0.9, ease: "power3.out" });
+      };
+
       // A slight lean toward the pointer.
       const lean = (e: PointerEvent) => {
         const dx = e.clientX / window.innerWidth - 0.5;
@@ -93,8 +133,13 @@ export const Hero = ({ headline, thesis, portrait }: Props) => {
         gsap.to(sun, { x: dx * -30, y: dy * -18, duration: 1.6, ease: "power3.out" });
       };
       window.addEventListener("pointermove", lean);
+      window.addEventListener("pointermove", onMove);
+      window.addEventListener("pointermove", tiltPortrait);
       return () => {
         window.removeEventListener("pointermove", lean);
+        window.removeEventListener("pointermove", onMove);
+        window.removeEventListener("pointermove", tiltPortrait);
+        if (pending) cancelAnimationFrame(pending);
         window.removeEventListener(INTRO_DONE, assemble);
       };
     },
@@ -152,13 +197,11 @@ export const Hero = ({ headline, thesis, portrait }: Props) => {
               >
                 {li === 1 ? (
                   <span className="relative inline-block">
-                    {line.map(({ char, index }) => (
-                      <span key={index}>{char === " " ? " " : char}</span>
-                    ))}
+                    {line.map(({ char, index }) => glyph(char, index))}
                     <span data-hero-underline className="absolute inset-x-0 -bottom-[0.07em] h-[0.035em] bg-ember" />
                   </span>
                 ) : (
-                  line.map(({ char, index }) => <span key={index}>{char === " " ? " " : char}</span>)
+                  line.map(({ char, index }) => glyph(char, index))
                 )}
               </span>
             ))}
@@ -198,6 +241,16 @@ export const Hero = ({ headline, thesis, portrait }: Props) => {
     </section>
   );
 };
+
+/** Words need a real gap, so a space is a fixed-width box rather than a collapsed character. */
+const glyph = (char: string, index: number) =>
+  char === " " ? (
+    <span key={index} className="inline-block w-[0.22em]" />
+  ) : (
+    <span key={index} data-letter className="inline-block will-change-transform">
+      {char}
+    </span>
+  );
 
 /** "Ideas become outcomes." becomes two lines of indexed characters. */
 const splitHeadline = (headline: string) => {
