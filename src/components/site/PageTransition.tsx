@@ -50,12 +50,30 @@ export const PageTransition = () => {
           duration: 0.6,
           ease: "expo.inOut",
           // Scrolling is handled here, so pins are in place before jumping to a section.
+          // The page is already prefetched on hover, so this rarely waits.
           onComplete: () => router.push(url.pathname + url.search, { scroll: false }),
         },
       );
     };
+
+    // Fetch a page as soon as the reader hovers its link, so most clicks land on a ready page.
+    const prefetched = new Set<string>();
+    const onHover = (e: PointerEvent) => {
+      const anchor = (e.target as HTMLElement).closest("a");
+      if (!anchor || anchor.target === "_blank") return;
+      const url = new URL(anchor.href, window.location.href);
+      if (url.origin !== window.location.origin || url.pathname.startsWith("/admin")) return;
+      if (url.pathname === window.location.pathname || prefetched.has(url.pathname)) return;
+      prefetched.add(url.pathname);
+      router.prefetch(url.pathname);
+    };
+
     document.addEventListener("click", onClick, true);
-    return () => document.removeEventListener("click", onClick, true);
+    document.addEventListener("pointerover", onHover);
+    return () => {
+      document.removeEventListener("click", onClick, true);
+      document.removeEventListener("pointerover", onHover);
+    };
   }, [router]);
 
   useEffect(() => {
@@ -73,6 +91,8 @@ export const PageTransition = () => {
     });
     if (!covering.current) return;
     covering.current = false;
+    // The page can arrive before the curtain has finished rising, so stop that rise first.
+    gsap.killTweensOf(curtain.current);
     gsap.to(curtain.current, {
       yPercent: -100,
       duration: 0.7,
