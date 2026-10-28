@@ -1,51 +1,43 @@
 "use client";
 
 import { useRef } from "react";
-import { gsap, useDeferredGSAP } from "@/lib/gsap";
+import { gsap, useDeferredGSAP, prefersReducedMotion } from "@/lib/gsap";
 import { Folio } from "./Folio";
 
-const CLOTH_PANELS = [0, 1, 2, 3, 4];
-
 /*
- * A book is being written. Its cover is still under cloth, and the cloth falls
- * away as the reader scrolls. Only the fact that it exists is shown, no details.
+ * A book is being written. It stands on a pedestal under a draped cloth, and
+ * nothing of it shows. The pedestal turns slowly, the cloth breathes, and the
+ * scene tilts toward the reader's pointer. Anticipation, not reveal.
  */
 export const BookHint = () => {
   const root = useRef<HTMLElement>(null);
-  const book = useRef<HTMLDivElement>(null);
+  const scene = useRef<HTMLDivElement>(null);
+  const cloth = useRef<HTMLDivElement>(null);
 
   useDeferredGSAP(
     () => {
-      const cloth = gsap.utils.toArray<HTMLElement>("[data-cloth]");
-      gsap.set(book.current, { rotateY: -18, rotateX: 8, y: 30 });
-      gsap.to(cloth, {
-        yPercent: (i) => 110 + i * 6,
-        rotateZ: (i) => (i % 2 === 0 ? -9 : 7),
-        rotateX: 26,
-        skewX: (i) => (i % 2 === 0 ? -6 : 5),
-        ease: "power2.in",
-        stagger: { each: 0.08, from: "start" },
-        scrollTrigger: { trigger: root.current, start: "top 75%", end: "center 45%", scrub: 0.9 },
-      });
-      gsap.to(book.current, {
-        rotateY: 0,
-        rotateX: 0,
-        y: 0,
-        ease: "power2.out",
-        scrollTrigger: { trigger: root.current, start: "top 75%", end: "center 40%", scrub: 0.9 },
-      });
-      gsap.to("[data-book-float]", {
-        y: -10,
-        duration: 2.8,
-        yoyo: true,
-        repeat: -1,
-        ease: "sine.inOut",
-      });
+      if (!scene.current || !cloth.current) return;
+      if (prefersReducedMotion()) return;
+
+      gsap.fromTo(
+        scene.current,
+        { y: 70, rotateX: 18, opacity: 0 },
+        {
+          y: 0,
+          rotateX: 0,
+          opacity: 1,
+          ease: "power3.out",
+          scrollTrigger: { trigger: root.current, start: "top 80%", end: "center 50%", scrub: 0.8 },
+        },
+      );
+      gsap.to(scene.current, { rotateY: 14, duration: 7, yoyo: true, repeat: -1, ease: "sine.inOut" });
+      gsap.to(cloth.current, { scaleY: 1.025, scaleX: 0.99, duration: 3.4, yoyo: true, repeat: -1, ease: "sine.inOut", transformOrigin: "50% 100%" });
+      gsap.to("[data-spot]", { opacity: 0.85, duration: 2.6, yoyo: true, repeat: -1, ease: "sine.inOut" });
 
       const tilt = (e: PointerEvent) => {
         const dx = e.clientX / window.innerWidth - 0.5;
         const dy = e.clientY / window.innerHeight - 0.5;
-        gsap.to(book.current, { rotateY: dx * 22, rotateX: -dy * 14, duration: 1.1, ease: "power3.out" });
+        gsap.to(scene.current, { x: dx * 26, rotateX: -dy * 8, duration: 1.4, ease: "power3.out" });
       };
       window.addEventListener("pointermove", tilt);
       return () => window.removeEventListener("pointermove", tilt);
@@ -70,54 +62,56 @@ export const BookHint = () => {
           </p>
         </div>
 
-        <div className="relative mx-auto h-[min(70vw,520px)] w-[min(70vw,400px)] md:col-span-5 md:col-start-8" style={{ perspective: 1400 }}>
-          <div data-book-float className="absolute inset-0">
-            <div ref={book} className="relative h-full w-full" style={{ transformStyle: "preserve-3d" }}>
-              {/* Pages */}
-              <div
-                className="absolute inset-y-[3%] right-[2%] w-[92%] rounded-[2px] bg-paper"
-                style={{ transform: "translateZ(-18px)", boxShadow: "inset 0 0 0 1px rgba(22,21,19,.12)" }}
-              />
-              {/* Cover */}
-              <div
-                className="absolute inset-0 flex flex-col justify-between rounded-[3px] bg-rising p-8 md:p-10"
-                style={{ transform: "translateZ(14px)", boxShadow: "0 40px 80px -24px rgba(0,0,0,.7)" }}
-              >
-                <span className="text-[11px] uppercase tracking-[0.24em] text-paper/80">In progress</span>
-                <span className="font-display text-4xl italic leading-none text-paper/90 md:text-5xl">&hellip;</span>
-              </div>
-              {/* Spine */}
-              <div
-                className="absolute inset-y-0 left-0 w-[28px] origin-left rounded-l-[3px] bg-rising-ink"
-                style={{ transform: "rotateY(-90deg) translateZ(0px)" }}
-              />
-              {/* Cloth, falling away as the reader scrolls */}
-              <div className="absolute inset-0" style={{ transform: "translateZ(40px)", transformStyle: "preserve-3d" }}>
-                {CLOTH_PANELS.map((i) => (
-                  <div
-                    key={i}
-                    data-cloth
-                    className="absolute inset-y-0 origin-top"
-                    style={{
-                      left: `${i * 20}%`,
-                      width: "21%",
-                      background: `linear-gradient(${100 + i * 12}deg, #d6cfc1 0%, #e9e3d7 35%, #b9b1a2 60%, #e9e3d7 85%, #cfc7b6 100%)`,
-                      boxShadow: "0 0 30px rgba(0,0,0,.35)",
-                      borderRadius: "2px",
-                    }}
-                  >
-                    <span
-                      aria-hidden
-                      className="absolute inset-0 opacity-40 mix-blend-multiply"
-                      style={{
-                        backgroundImage:
-                          "repeating-linear-gradient(90deg, rgba(22,21,19,.08) 0 2px, transparent 2px 9px), repeating-linear-gradient(0deg, rgba(22,21,19,.05) 0 1px, transparent 1px 14px)",
-                      }}
-                    />
-                  </div>
-                ))}
-              </div>
+        <div className="relative mx-auto h-[min(92vw,520px)] w-[min(92vw,470px)] md:col-span-5 md:col-start-8" style={{ perspective: 1200 }}>
+          {/* Spotlight from above */}
+          <div
+            data-spot
+            aria-hidden
+            className="pointer-events-none absolute inset-x-[10%] top-[-6%] h-[70%] rounded-full opacity-60 blur-2xl"
+            style={{ background: "radial-gradient(closest-side, rgba(232,119,46,.45), transparent 70%)" }}
+          />
+
+          <div ref={scene} className="absolute inset-0" style={{ transformStyle: "preserve-3d" }}>
+            {/* Pedestal */}
+            <div className="absolute bottom-[4%] left-1/2 h-[44%] w-[70%] -translate-x-1/2 rounded-b-[4px]" style={{ background: "linear-gradient(90deg, #2a2723 0%, #46403a 35%, #5b5349 55%, #2a2723 100%)", boxShadow: "0 40px 60px -20px rgba(0,0,0,.8)" }}>
+              <div className="absolute -top-[14px] left-[-6%] h-[28px] w-[112%] rounded-[50%]" style={{ background: "radial-gradient(ellipse at 50% 40%, #6a6258 0%, #3c3730 75%)" }} />
             </div>
+
+            {/* Cloth, draped over an unseen book */}
+            <div
+              ref={cloth}
+              className="absolute bottom-[40%] left-1/2 h-[62%] w-[66%] -translate-x-1/2 overflow-hidden"
+              style={{
+                borderRadius: "46% 46% 6% 6% / 34% 34% 4% 4%",
+                background:
+                  "linear-gradient(100deg, #4a0c08 0%, #9c1f17 16%, #d9473d 34%, #a8231a 50%, #6b1310 68%, #c0382c 84%, #4a0c08 100%)",
+                clipPath: "polygon(0% 0%, 100% 0%, 100% 86%, 93% 100%, 80% 90%, 66% 100%, 52% 88%, 38% 100%, 22% 90%, 10% 100%, 0% 88%)",
+                boxShadow: "0 30px 50px -18px rgba(0,0,0,.75), inset 0 0 40px rgba(0,0,0,.35)",
+              }}
+            >
+              {/* Folds */}
+              <span
+                aria-hidden
+                className="absolute inset-0 mix-blend-multiply"
+                style={{
+                  background:
+                    "repeating-linear-gradient(94deg, rgba(0,0,0,.32) 0 5px, rgba(255,255,255,.12) 9px 14px, transparent 18px 34px)",
+                }}
+              />
+              {/* Soft highlight on the crown of the cloth */}
+              <span
+                aria-hidden
+                className="absolute left-[18%] top-[6%] h-[40%] w-[46%] rounded-full opacity-70 blur-xl"
+                style={{ background: "radial-gradient(closest-side, rgba(255,220,200,.45), transparent 75%)" }}
+              />
+            </div>
+
+            {/* Floor shadow */}
+            <div
+              aria-hidden
+              className="absolute bottom-[-2%] left-1/2 h-[7%] w-[84%] -translate-x-1/2 rounded-[50%] blur-md"
+              style={{ background: "rgba(0,0,0,.6)" }}
+            />
           </div>
         </div>
       </div>
