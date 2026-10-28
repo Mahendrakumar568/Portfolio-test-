@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { listPublishedPosts } from "@/lib/store";
+import { getSettings, listPublishedPosts } from "@/lib/store";
 import { WritingIndex } from "@/components/writing/WritingIndex";
 
 // Re-render hourly so a signal with an end date switches itself off on time.
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 };
 
 export default async function WritingPage() {
-  const posts = await listPublishedPosts();
+  const [posts, settings] = await Promise.all([listPublishedPosts(), getSettings()]);
   const items = posts.map((p) => ({
     slug: p.slug,
     kind: p.kind,
@@ -31,7 +31,7 @@ export default async function WritingPage() {
           Rising Ideas editions and essays on technology, business, startups, geopolitics and politics. Newest first.
         </p>
         <div className="mt-16">
-          <WritingIndex items={items} />
+          <WritingIndex items={items} topics={settings.topics} />
         </div>
       </div>
     </div>

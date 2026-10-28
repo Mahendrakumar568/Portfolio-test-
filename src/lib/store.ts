@@ -2,7 +2,7 @@ import "server-only";
 import { promises as fs } from "fs";
 import path from "path";
 import { Redis } from "@upstash/redis";
-import type { Post, SiteSettings } from "./types";
+import { DEFAULT_TOPICS, type Post, type SiteSettings } from "./types";
 
 /*
  * Content storage. Locally, content lives in /content as JSON files, so the
@@ -94,7 +94,13 @@ export const usesHostedStore = () => redisCredentials() !== null;
 // On Vercel the deployed files are read-only, so edits only stick with Redis connected.
 export const canSave = () => usesHostedStore() || !process.env.VERCEL;
 
-export const getSettings = async (): Promise<SiteSettings> => withExpiredSignalOff(await backend().readSettings());
+const withDefaults = (settings: SiteSettings): SiteSettings => ({
+  ...settings,
+  topics: settings.topics?.length ? settings.topics : DEFAULT_TOPICS,
+});
+
+export const getSettings = async (): Promise<SiteSettings> =>
+  withExpiredSignalOff(withDefaults(await backend().readSettings()));
 
 const withExpiredSignalOff = (settings: SiteSettings): SiteSettings => {
   const { endsOn } = settings.signal;
@@ -104,7 +110,7 @@ const withExpiredSignalOff = (settings: SiteSettings): SiteSettings => {
   return { ...settings, signal: { ...settings.signal, mode: "off" } };
 };
 
-export const getRawSettings = () => backend().readSettings();
+export const getRawSettings = async () => withDefaults(await backend().readSettings());
 
 export const saveSettings = (settings: SiteSettings) =>
   backend().writeSettings({ ...settings, updatedAt: new Date().toISOString() });

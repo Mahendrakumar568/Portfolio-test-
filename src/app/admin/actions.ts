@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { endSession, passwordMatches, requireAdmin, startSession } from "@/lib/auth";
 import { deletePost, getPostById, getRawSettings, listAllPosts, savePost, saveSettings } from "@/lib/store";
 import { slugify } from "@/lib/format";
-import { TOPICS, type Post, type SignalMode, type Topic } from "@/lib/types";
+import { TOPIC_MAX_LENGTH, type Post, type SignalMode } from "@/lib/types";
 
 export type FormState = { ok?: boolean; message?: string };
 
@@ -46,7 +46,7 @@ export const savePostAction = async (_: FormState, form: FormData): Promise<Form
   const title = text(form, "title");
   if (!title) return { message: "Add a title before saving." };
 
-  const topic = text(form, "topic") as Topic;
+  const topic = text(form, "topic").slice(0, TOPIC_MAX_LENGTH);
   const slug = slugify(text(form, "slug") || title);
   const clash = (await listAllPosts()).find((p) => p.slug === slug && p.id !== id);
   if (clash) return { message: `Another piece already uses the address /writing/${slug}. Change the address.` };
@@ -59,7 +59,7 @@ export const savePostAction = async (_: FormState, form: FormData): Promise<Form
     title,
     editionNumber: kind === "edition" ? number(form, "editionNumber") : undefined,
     date: text(form, "date") || new Date().toISOString().slice(0, 10),
-    topic: TOPICS.includes(topic) ? topic : "Business",
+    topic: topic || "Business",
     excerpt: text(form, "excerpt"),
     body: String(form.get("body") ?? ""),
     pullQuote: text(form, "pullQuote") || undefined,
@@ -150,4 +150,22 @@ export const saveProfileAction = async (_: FormState, form: FormData): Promise<F
   if (failed) return failed;
   refreshSite();
   return { ok: true, message: "Profile saved." };
+};
+
+export const saveTopicsAction = async (_: FormState, form: FormData): Promise<FormState> => {
+  await requireAdmin();
+  const settings = await getRawSettings();
+  const topics = [
+    ...new Set(
+      String(form.get("topics") ?? "")
+        .split("\n")
+        .map((t) => t.trim().slice(0, TOPIC_MAX_LENGTH))
+        .filter(Boolean),
+    ),
+  ];
+  if (topics.length === 0) return { message: "Keep at least one topic." };
+  const failed = await saveFailure(() => saveSettings({ ...settings, topics }));
+  if (failed) return failed;
+  refreshSite();
+  return { ok: true, message: "Topics saved. The Writing page shows them straight away." };
 };

@@ -7,6 +7,7 @@ export const AdminNav = ({ signalOn, revealed }: { signalOn: boolean; revealed: 
   const pathname = usePathname();
   const items = [
     { href: "/admin", label: "Writing", active: pathname === "/admin" || pathname.startsWith("/admin/posts") },
+    { href: "/admin/topics", label: "Writing topics" },
     { href: "/admin/signal", label: "Availability signal", badge: signalOn ? "On" : undefined },
     { href: "/admin/venture", label: "Stealth venture", badge: revealed ? "Revealed" : "Sealed" },
     { href: "/admin/profile", label: "Profile and numbers" },

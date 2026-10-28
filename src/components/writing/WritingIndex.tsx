@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useMemo, useRef, useState } from "react";
-import { TOPICS, type Topic } from "@/lib/types";
 import { formatDate } from "@/lib/format";
 import { gsap, useGSAP, prefersReducedMotion } from "@/lib/gsap";
 
@@ -11,7 +10,7 @@ type Item = {
   kind: "edition" | "essay";
   title: string;
   date: string;
-  topic: Topic;
+  topic: string;
   excerpt: string;
   editionNumber?: number;
   source?: string;
@@ -23,9 +22,9 @@ const KINDS = [
   { value: "essay", label: "Essays" },
 ] as const;
 
-export const WritingIndex = ({ items }: { items: Item[] }) => {
+export const WritingIndex = ({ items, topics }: { items: Item[]; topics: string[] }) => {
   const [kind, setKind] = useState<(typeof KINDS)[number]["value"]>("all");
-  const [topic, setTopic] = useState<Topic | "all">("all");
+  const [topic, setTopic] = useState<string>("all");
   const list = useRef<HTMLUListElement>(null);
 
   const visible = useMemo(
@@ -57,7 +56,7 @@ export const WritingIndex = ({ items }: { items: Item[] }) => {
           ))}
         </div>
         <div className="flex flex-wrap gap-2" role="group" aria-label="Filter by topic">
-          {(["all", ...TOPICS] as const).map((t) => (
+          {["all", ...topics].map((t) => (
             <button key={t} type="button" aria-pressed={topic === t} className={chip(topic === t)} onClick={() => setTopic(t)}>
               {t === "all" ? "All topics" : t === "Geopolitics" ? "Geopolitics and politics" : t}
             </button>

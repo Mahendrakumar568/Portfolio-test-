@@ -1,5 +1,6 @@
-export const TOPICS = ["Technology", "Business", "Startups", "Geopolitics"] as const;
-export type Topic = (typeof TOPICS)[number];
+/** Starting topics. Jithendra edits the live list in the admin. */
+export const DEFAULT_TOPICS = ["Technology", "Business", "Startups", "Geopolitics"];
+export const TOPIC_MAX_LENGTH = 40;
 
 export type PostKind = "edition" | "essay";
 
@@ -11,7 +12,7 @@ export type Post = {
   /** Rising Ideas edition number; editions only. */
   editionNumber?: number;
   date: string; // ISO date, yyyy-mm-dd
-  topic: Topic;
+  topic: string;
   excerpt: string;
   /** Markdown. Empty when the full text lives elsewhere. */
   body: string;
@@ -59,6 +60,8 @@ export type SiteSettings = {
   mediumUrl: string;
   subscribers: number;
   editions: number;
+  /** Writing topics shown as filters and in the post editor. */
+  topics: string[];
   signal: Signal;
   stealth: StealthVenture;
   updatedAt: string;

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getPostById } from "@/lib/store";
+import { getPostById, getRawSettings } from "@/lib/store";
 import { PostEditor } from "@/components/admin/PostEditor";
 import type { Post } from "@/lib/types";
 
@@ -8,6 +8,7 @@ export const dynamic = "force-dynamic";
 
 export default async function EditPostPage({ params, searchParams }: PageProps<"/admin/posts/[id]">) {
   const { id } = await params;
+  const settings = await getRawSettings();
   const { kind } = await searchParams;
   let post: Post | null;
   if (id === "new") {
@@ -39,7 +40,7 @@ export default async function EditPostPage({ params, searchParams }: PageProps<"
       <h1 className="font-display mt-2 text-4xl tracking-[-0.02em]">
         {id === "new" ? (post.kind === "edition" ? "New Rising Ideas edition" : "New essay") : post.title}
       </h1>
-      <PostEditor post={post} />
+      <PostEditor post={post} topics={settings.topics} />
     </div>
   );
 }

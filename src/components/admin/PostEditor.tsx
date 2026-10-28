@@ -3,11 +3,12 @@
 import { useActionState, useMemo, useState } from "react";
 import { marked } from "marked";
 import { deletePostAction, savePostAction, type FormState } from "@/app/admin/actions";
-import { TOPICS, type Post } from "@/lib/types";
+import type { Post } from "@/lib/types";
 import { Field, Panel, SaveBar, Switch, inputClass } from "./ui";
 import { ImageField } from "./ImageField";
 
-export const PostEditor = ({ post }: { post: Post }) => {
+export const PostEditor = ({ post, topics }: { post: Post; topics: string[] }) => {
+  const choices = topics.includes(post.topic) || !post.topic ? topics : [...topics, post.topic];
   const [state, action] = useActionState<FormState, FormData>(savePostAction, {});
   const [kind, setKind] = useState(post.kind);
   const [body, setBody] = useState(post.body);
@@ -82,7 +83,7 @@ export const PostEditor = ({ post }: { post: Post }) => {
               </Field>
               <Field label="Topic">
                 <select name="topic" defaultValue={post.topic} className={inputClass}>
-                  {TOPICS.map((t) => (
+                  {choices.map((t) => (
                     <option key={t} value={t}>
                       {t === "Geopolitics" ? "Geopolitics and politics" : t}
                     </option>
