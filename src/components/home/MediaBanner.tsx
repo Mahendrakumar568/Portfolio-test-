@@ -14,9 +14,10 @@ export const MediaBanner = ({ items }: { items: MediaItem[] }) => {
       <div className="media-track flex w-max items-center gap-14 pr-14">
         {loop.map((item, i) => {
           const content = item.logo ? (
-            <span className="flex h-20 items-center rounded-full bg-paper px-8 transition-transform duration-300 group-hover:scale-105">
+            // Every logo sits in the same box, so wide and tall marks line up.
+            <span className="flex h-24 w-56 items-center justify-center rounded-xl bg-paper p-5 transition-transform duration-300 group-hover:scale-105">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={item.logo} alt={i < items.length ? item.label : ""} className="h-10 w-auto max-w-[220px] object-contain" />
+              <img src={item.logo} alt={i < items.length ? item.label : ""} className="max-h-full max-w-full object-contain" />
             </span>
           ) : (
             <span className="flex items-baseline gap-5 whitespace-nowrap">
