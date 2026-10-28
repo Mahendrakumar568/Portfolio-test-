@@ -25,7 +25,7 @@ const grow = (x: number, y: number, angle: number, length: number, width: number
 };
 
 const branches: Branch[] = [];
-grow(212, 300, -Math.PI / 2, 62, 9, 8, 7, branches);
+grow(238, 300, -Math.PI / 2 + 0.04, 56, 8.5, 8, 7, branches);
 
 const BIRDS = [
   [250, 70, 1],
@@ -57,7 +57,7 @@ export const RisingCover = ({ className = "" }: { className?: string }) => (
         <path key={i} d={b.d} strokeWidth={b.w} />
       ))}
     </g>
-    <path d="M150 300 Q212 286 290 300" stroke="#3b2a17" strokeWidth="2" fill="none" />
+    <path d="M170 300 Q238 286 300 300" stroke="#3b2a17" strokeWidth="2" fill="none" />
     <g fill="#c2410c">
       {BIRDS.map(([x, y, s], i) => (
         <path
