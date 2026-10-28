@@ -16,6 +16,24 @@ const pointOnArc = (t: number) => {
   };
 };
 
+const STORAGE_KEY = "ri:progress";
+
+const readHidden = () => {
+  try {
+    return window.localStorage.getItem(STORAGE_KEY) === "hidden";
+  } catch {
+    return false;
+  }
+};
+
+const writeHidden = (hidden: boolean) => {
+  try {
+    window.localStorage.setItem(STORAGE_KEY, hidden ? "hidden" : "shown");
+  } catch {
+    // Storage can be blocked; the choice then lasts for this visit only.
+  }
+};
+
 /*
  * A sun that travels across the page as the reader scrolls. It shows how far
  * they have come, names the chapter they are in and the next one, and counts
@@ -26,6 +44,11 @@ export const ReadingGuide = () => {
   const [current, setCurrent] = useState(0);
   const [done, setDone] = useState(false);
   const [started, setStarted] = useState(false);
+  // The reader can hide the guide. The choice is remembered on this device only.
+  const [collapsed, setCollapsed] = useState(false);
+  // The guide steps aside over the footer, so it never covers the footer's links.
+  const [atFooter, setAtFooter] = useState(false);
+  const loaded = useRef(false);
   const sun = useRef<SVGCircleElement>(null);
   const glow = useRef<SVGCircleElement>(null);
 
@@ -54,6 +77,12 @@ export const ReadingGuide = () => {
       setCurrent(index);
       setDone(progress > 0.96);
       setStarted(window.scrollY > 80);
+      const footer = document.querySelector("footer");
+      setAtFooter(!!footer && footer.getBoundingClientRect().top < window.innerHeight * 0.9);
+      if (!loaded.current) {
+        loaded.current = true;
+        setCollapsed(readHidden());
+      }
     };
     const onScroll = () => {
       if (!frame) frame = requestAnimationFrame(update);
@@ -71,15 +100,43 @@ export const ReadingGuide = () => {
 
   if (chapters.length === 0) return null;
   const next = chapters[current + 1];
+  const open = started && !collapsed && !atFooter;
+
+  const setHidden = (hidden: boolean) => {
+    setCollapsed(hidden);
+    writeHidden(hidden);
+  };
 
   return (
+    <>
+      {started && collapsed && !atFooter && (
+        <button
+          type="button"
+          onClick={() => setHidden(false)}
+          aria-label="Show reading progress"
+          className="fixed bottom-4 right-4 z-40 flex h-11 w-11 items-center justify-center rounded-full border border-rule bg-paper shadow-[0_8px_24px_-12px_rgba(22,21,19,.35)] transition-colors hover:border-ink md:bottom-6 md:right-6"
+        >
+          <svg viewBox="0 0 24 24" className="h-5 w-5" aria-hidden>
+            <circle cx="12" cy="12" r="5" fill="#c2410c" />
+          </svg>
+        </button>
+      )}
     <aside
       aria-label="Reading progress"
-      aria-hidden={!started}
-      className={`fixed bottom-4 right-4 z-40 w-[min(23rem,calc(100vw-2rem))] rounded-[3px] border border-rule bg-paper/90 px-4 py-3 text-ink shadow-[0_12px_40px_-12px_rgba(22,21,19,.3)] transition-all duration-700 md:bottom-6 md:right-6 ${
-        started ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-4 opacity-0"
+      aria-hidden={!open}
+      className={`fixed bottom-4 right-4 z-40 w-[min(23rem,calc(100vw-2rem))] rounded-[3px] border border-rule bg-paper/90 px-4 py-3 pr-9 text-ink shadow-[0_12px_40px_-12px_rgba(22,21,19,.3)] transition-all duration-700 md:bottom-6 md:right-6 ${
+        open ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-4 opacity-0"
       }`}
     >
+      <button
+        type="button"
+        onClick={() => setHidden(true)}
+        aria-label="Hide reading progress"
+        tabIndex={open ? 0 : -1}
+        className="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full text-ink-soft transition-colors hover:text-ink"
+      >
+        <span aria-hidden className="text-base leading-none">&times;</span>
+      </button>
       <div className="flex items-end justify-between gap-4">
         <div className="min-w-0">
           <p className="text-[11px] uppercase tracking-[0.18em] text-ink-soft">
@@ -111,5 +168,6 @@ export const ReadingGuide = () => {
         </Link>
       )}
     </aside>
+    </>
   );
 };
