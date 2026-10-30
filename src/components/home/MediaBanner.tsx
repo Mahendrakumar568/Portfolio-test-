@@ -7,7 +7,7 @@ export const MediaBanner = ({ items }: { items: MediaItem[] }) => {
   const loop = [...items, ...items];
   return (
     <section aria-label="Featured in" className="relative overflow-hidden bg-night py-16 text-night-ink md:py-20">
-      <p className="mx-auto mb-10 flex max-w-[1440px] items-center gap-3 px-5 text-sm uppercase tracking-[0.22em] text-ember md:px-10">
+      <p className="mx-auto mb-10 flex max-w-[1440px] items-center gap-3 px-5 text-sm text-ember md:px-10">
         <span aria-hidden className="inline-block h-2 w-2 animate-pulse rounded-full bg-ember" />
         Featured in
       </p>

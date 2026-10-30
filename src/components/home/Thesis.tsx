@@ -11,7 +11,7 @@ export const Thesis = ({ statements }: { statements: string[] }) => {
     () => {
       const words = gsap.utils.toArray<HTMLElement>("[data-word]");
       // Unread words stay grey but legible (3:1 at this size), then turn to ink.
-      gsap.set(words, { color: "#8f897e" });
+      gsap.set(words, { color: "#6f695f" });
       gsap.to(words, {
         color: "#161513",
         stagger: 0.12,

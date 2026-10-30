@@ -50,6 +50,7 @@ export const TopicRail = ({ topics }: { topics: string[] }) => {
                 type="button"
                 onClick={() => jump(topic)}
                 aria-label={label}
+                title={label}
                 aria-current={selected ? "true" : undefined}
                 className="group flex h-3 w-3 items-center justify-center"
               >
@@ -60,14 +61,6 @@ export const TopicRail = ({ topics }: { topics: string[] }) => {
                   }`}
                 />
               </button>
-              <span
-                aria-hidden
-                className={`pointer-events-none absolute left-6 top-1/2 -translate-y-1/2 whitespace-nowrap rounded-full bg-paper px-3 py-1 text-sm text-ink shadow-[0_6px_18px_-10px_rgba(20,20,20,.5)] transition-all duration-300 ${
-                  selected ? "translate-x-0 opacity-100" : "-translate-x-2 opacity-0"
-                }`}
-              >
-                {label}
-              </span>
             </li>
           );
         })}

@@ -170,7 +170,7 @@ export const Lens = ({ essayLinks, subjects }: { essayLinks: Record<string, Essa
           >
             Four subjects, one way of reading.
           </h2>
-          <p className="mt-6 flex items-center gap-3 text-sm uppercase tracking-[0.2em] text-rising-ink">
+          <p className="mt-6 flex items-center gap-3 text-base text-rising-ink">
             <span aria-hidden className="inline-block h-2 w-2 animate-pulse rounded-full bg-ember" />
             {paused ? "Choose a subject" : "Tap a subject, or use the arrow keys"}
           </p>
@@ -341,10 +341,10 @@ export const Lens = ({ essayLinks, subjects }: { essayLinks: Record<string, Essa
           </h3>
           <div className="flex flex-col gap-4 md:col-span-4 md:col-start-9 md:justify-end">
             <Link href="/writing" className="group flex items-center justify-between border-t border-ink/20 py-5 text-lg transition-colors hover:text-rising">
-              Read the essays <span aria-hidden className="transition-transform group-hover:translate-x-1">&rarr;</span>
+              Read the essays
             </Link>
             <Link href="/#contact" className="group flex items-center justify-between border-t border-b border-ink/20 py-5 text-lg transition-colors hover:text-rising">
-              Start a conversation <span aria-hidden className="transition-transform group-hover:translate-x-1">&rarr;</span>
+              Start a conversation
             </Link>
           </div>
         </div>

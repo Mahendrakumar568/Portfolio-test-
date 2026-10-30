@@ -139,8 +139,8 @@ export const ReadingGuide = () => {
       </button>
       <div className="flex items-end justify-between gap-4">
         <div className="min-w-0">
-          <p className="text-[11px] uppercase tracking-[0.18em] text-ink-soft">
-            {done ? "You made it" : `Now · ${chapters[current]}`}
+          <p className="text-xs text-ink-soft">
+            {done ? "You made it" : `Now: ${chapters[current]}`}
           </p>
           <p className="mt-0.5 truncate text-sm">
             {done ? "Let's talk ideas." : next ? `Up next: ${next}` : chapters[current]}
@@ -164,7 +164,7 @@ export const ReadingGuide = () => {
           href="/#contact"
           className="mt-3 inline-flex rounded-full bg-ink px-4 py-2 text-sm text-paper transition-colors hover:bg-rising"
         >
-          Start a conversation &rarr;
+          Start a conversation
         </Link>
       )}
     </aside>

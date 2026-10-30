@@ -35,7 +35,7 @@ export const Contact = ({ copy, signal, email, linkedinUrl, newsletterUrl }: Pro
         clipPath: "inset(0 100% 0 0)",
         duration: 1.4,
         ease: "expo.inOut",
-        scrollTrigger: { trigger: "[data-contact-photo]", start: "top 85%" },
+        scrollTrigger: { trigger: "[data-contact-photo]", start: "top 95%" },
       });
     },
     root,

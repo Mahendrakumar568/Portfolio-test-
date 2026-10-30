@@ -26,7 +26,7 @@ export const Work = ({ stealth, work }: { stealth: StealthVenture; work: SiteCop
         {
           clipPath: "inset(0% 0% 0% 0% round 6px)",
           ease: "none",
-          scrollTrigger: { trigger: "[data-jewel]", start: "top 95%", end: "top 40%", scrub: true },
+          scrollTrigger: { trigger: "[data-jewel]", start: "top 90%", end: "top 60%", scrub: true },
         },
       );
     },

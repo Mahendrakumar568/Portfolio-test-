@@ -165,7 +165,7 @@ export const Hero = ({ headline, thesis, portrait, editor, role }: Props) => {
         className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[2px] bg-ember shadow-[0_0_40px_12px_rgba(232,119,46,.55)]"
       />
 
-      <div data-hero-sun-wrap aria-hidden className="pointer-events-none absolute right-[8%] top-[18%] z-[1] md:right-[16%]">
+      <div data-hero-sun-wrap aria-hidden className="pointer-events-none absolute right-[6%] top-[4%] z-[1] scale-75 origin-top-right md:right-[16%] md:top-[18%] md:scale-100">
         <div
           data-hero-sun
           className="h-[46vw] w-[46vw] rounded-full md:h-[30vw] md:w-[30vw]"
@@ -186,7 +186,7 @@ export const Hero = ({ headline, thesis, portrait, editor, role }: Props) => {
         <h1
           data-hero-headline
           aria-label={headline}
-          className="font-display relative mt-[5vh] text-[17vw] leading-[0.86] tracking-[-0.045em] md:mt-[3vh] md:text-[min(11.6vw,21vh)]"
+          className="font-display relative mt-[5vh] text-[14vw] leading-[0.86] tracking-[-0.045em] sm:text-[15vw] md:mt-[3vh] md:text-[min(11.6vw,21vh)]"
         >
           <span data-hero-lean className="block">
             {lines.map((line, li) => (

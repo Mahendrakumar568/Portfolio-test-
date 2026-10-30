@@ -87,7 +87,7 @@ export const Timeline = ({ career }: { career: SiteCopy["career"] }) => {
         </div>
 
         <div className="md:col-span-7 md:col-start-6">
-          <p className="tabular text-xs uppercase tracking-[0.22em] text-rising-ink">Experience</p>
+          <p className="tabular text-sm text-rising-ink">Experience</p>
           <div data-years className="relative mt-8">
             <span aria-hidden className="absolute bottom-0 left-[5px] top-2 w-px bg-rule" />
             <span data-spine aria-hidden className="absolute bottom-0 left-[5px] top-2 w-px bg-rising" />
@@ -109,7 +109,7 @@ export const Timeline = ({ career }: { career: SiteCopy["career"] }) => {
                       <p className="tabular mt-1 flex items-center gap-3 text-sm text-ink-soft">
                         {entry.when}
                         {entry.current && (
-                          <span className="rounded-full bg-rising px-2.5 py-0.5 text-[11px] uppercase tracking-[0.14em] text-paper">
+                          <span className="rounded-full bg-rising px-2.5 py-0.5 text-xs text-paper">
                             Current
                           </span>
                         )}
@@ -123,20 +123,20 @@ export const Timeline = ({ career }: { career: SiteCopy["career"] }) => {
           </div>
 
           <div data-education className="mt-4 rounded-[3px] border border-rule bg-paper-deep p-7 md:p-10">
-            <p className="tabular text-xs uppercase tracking-[0.22em] text-rising-ink">Education</p>
+            <p className="tabular text-sm text-rising-ink">Education</p>
             <h3 className="font-display mt-4 text-3xl leading-tight tracking-[-0.01em] md:text-4xl">
               {career.education.degree}
             </h3>
             <p className="mt-2 text-lg text-ink">{career.education.school}</p>
             <p className="tabular mt-1 text-sm text-ink-soft">{career.education.years}</p>
 
-            <p className="tabular mt-8 text-xs uppercase tracking-[0.22em] text-ink-soft">Campus leadership</p>
+            <p className="tabular mt-8 text-sm text-ink-soft">Campus leadership</p>
             <ul className="mt-4 divide-y divide-rule border-t border-rule">
               {career.leadership.map((item) => (
                 <li key={`${item.role}-${item.org}`} className="grid gap-1 py-3 md:grid-cols-[1fr_auto] md:gap-6">
                   <p className="text-[15px]">
                     <span className="text-ink">{item.role}</span>
-                    <span className="text-ink-soft"> · {item.org}</span>
+                    <span className="text-ink-soft">, {item.org}</span>
                   </p>
                   <p className="tabular text-sm text-ink-soft md:text-right">{item.when}</p>
                 </li>
