@@ -114,7 +114,7 @@ export const WorkForm = ({ work }: { work: SiteCopy["work"] }) => {
   );
 };
 
-export const LensForm = ({ subjects }: { subjects: SiteCopy["lens"]["subjects"] }) => {
+export const LensForm = ({ subjects, essays }: { subjects: SiteCopy["lens"]["subjects"]; essays: { slug: string; title: string }[] }) => {
   const [state, action] = useSave(saveLensAction);
   return (
     <form action={action} className="space-y-6">
@@ -123,9 +123,21 @@ export const LensForm = ({ subjects }: { subjects: SiteCopy["lens"]["subjects"] 
         description="Each subject's title is fixed, because it links to its essay. Edit the line under it."
       >
         {subjects.map((subject, i) => (
-          <Field key={subject.title} label={subject.title}>
-            <textarea name={`line${i}`} defaultValue={subject.line} rows={3} className={inputClass} />
-          </Field>
+          <div key={subject.title} className="space-y-3 rounded-md border border-ink/10 p-4">
+            <Field label={subject.title}>
+              <textarea name={`line${i}`} defaultValue={subject.line} rows={3} className={inputClass} />
+            </Field>
+            <Field label="Recommended article" hint="Shown as the link under this subject. Choose from published pieces, or leave it empty for no link.">
+              <select name={`essay${i}`} defaultValue={subject.essay ?? ""} className={inputClass}>
+                <option value="">No article</option>
+                {essays.map((essay) => (
+                  <option key={essay.slug} value={essay.slug}>
+                    {essay.title}
+                  </option>
+                ))}
+              </select>
+            </Field>
+          </div>
         ))}
       </Panel>
       <SaveBar state={state} label="Save lens" />

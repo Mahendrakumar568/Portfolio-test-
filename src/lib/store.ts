@@ -104,7 +104,8 @@ const withDefaults = (settings: SiteSettings): SiteSettings => ({
 const withDefaultCopy = (copy: Partial<SiteCopy> | undefined): SiteCopy => ({
   career: { ...DEFAULT_COPY.career, ...copy?.career },
   work: { ...DEFAULT_COPY.work, ...copy?.work },
-  lens: { ...DEFAULT_COPY.lens, ...copy?.lens },
+  // Each subject keeps its default essay unless admin has chosen one (an empty choice counts).
+  lens: { subjects: DEFAULT_COPY.lens.subjects.map((subject, i) => ({ ...subject, ...copy?.lens?.subjects?.[i] })) },
   book: { ...DEFAULT_COPY.book, ...copy?.book },
   home: { ...DEFAULT_COPY.home, ...copy?.home },
   media: copy?.media ?? DEFAULT_COPY.media,

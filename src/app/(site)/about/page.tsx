@@ -12,20 +12,16 @@ export const metadata: Metadata = {
   description: "The four subjects Jithendra Sai Kilaru reads for the logic underneath: startups, business models, emerging technology, and strategy and geopolitics.",
 };
 
-/** The essay each lens panel points to, matched by a phrase in its slug. */
-const LENS_ESSAY: Record<string, string> = {
-  Startups: "founders-mindset",
-  "Business models": "simple-idea-is-transforming",
-  "Emerging technology": "wand-and-block-max",
-  "Strategy and geopolitics": "putin-in-delhi",
-};
-
 const toLink = (post?: Post) => (post ? { title: post.title, href: `/writing/${post.slug}` } : undefined);
 
 export default async function AboutPage() {
   const [posts, settings] = await Promise.all([listPublishedPosts(), getSettings()]);
+  // Each subject links to the essay chosen for it in admin.
   const essayLinks = Object.fromEntries(
-    Object.entries(LENS_ESSAY).map(([panel, phrase]) => [panel, toLink(posts.find((p) => p.slug.includes(phrase)))]),
+    settings.copy.lens.subjects.map((subject) => [
+      subject.title,
+      toLink(subject.essay ? posts.find((p) => p.slug === subject.essay) : undefined),
+    ]),
   );
 
   return (

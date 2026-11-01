@@ -1,10 +1,11 @@
-import { getRawSettings } from "@/lib/store";
+import { getRawSettings, listPublishedPosts } from "@/lib/store";
 import { BookForm, CareerForm, HomeForm, LensForm, MediaForm, WorkForm } from "@/components/admin/CopyForms";
 
 export const dynamic = "force-dynamic";
 
 export default async function CopyPage() {
-  const { copy } = await getRawSettings();
+  const [{ copy }, posts] = await Promise.all([getRawSettings(), listPublishedPosts()]);
+  const essays = posts.map((p) => ({ slug: p.slug, title: p.title }));
   return (
     <div>
       <h1 className="font-display text-4xl tracking-[-0.02em]">Site copy</h1>
@@ -30,7 +31,7 @@ export default async function CopyPage() {
         </div>
         <div id="lens">
           <h2 className="mb-4 text-xl font-semibold">About: the lens</h2>
-          <LensForm subjects={copy.lens.subjects} />
+          <LensForm subjects={copy.lens.subjects} essays={essays} />
         </div>
         <div id="book">
           <h2 className="mb-4 text-xl font-semibold">About: the book</h2>

@@ -32,7 +32,8 @@ export type SiteCopy = {
     practice: PracticeItem[];
   };
   /** Titles are fixed: each one links to its essay. Only the lines are editable. */
-  lens: { subjects: { title: string; line: string }[] };
+  /** essay is the slug of the recommended article for that subject; empty means no link. */
+  lens: { subjects: { title: string; line: string; essay?: string }[] };
   book: { label: string; heading: string; body: string };
   media: MediaItem[];
   home: {
@@ -92,10 +93,10 @@ export const DEFAULT_COPY: SiteCopy = {
   },
   lens: {
     subjects: [
-      { title: "Startups", line: "How a founder turns a hunch into something people pay for, and what a headline about a startup really says about the problem underneath." },
-      { title: "Business models", line: "Who pays, for what, and why they keep paying. Speed, trust and aggregation, and the markets where each one stops working." },
-      { title: "Emerging technology", line: "AI as augmentation, not replacement. Search, security and the systems that decide what reaches us, explained from the inside." },
-      { title: "Strategy and geopolitics", line: "Tariffs, energy and alliances. Why India will not be cornered into choosing between powers, and what that means for business." },
+      { title: "Startups", essay: "the-founders-mindset-thinking-beyond-limits", line: "How a founder turns a hunch into something people pay for, and what a headline about a startup really says about the problem underneath." },
+      { title: "Business models", essay: "how-a-simple-idea-is-transforming-an-entire-industry-and-what-we-can-learn-from", line: "Who pays, for what, and why they keep paying. Speed, trust and aggregation, and the markets where each one stops working." },
+      { title: "Emerging technology", essay: "wand-and-block-max-wand-efficient-algorithms-for-top-k-document-retrieval", line: "AI as augmentation, not replacement. Search, security and the systems that decide what reaches us, explained from the inside." },
+      { title: "Strategy and geopolitics", essay: "putin-in-delhi-indias-master-move-in-global-chess", line: "Tariffs, energy and alliances. Why India will not be cornered into choosing between powers, and what that means for business." },
     ],
   },
   book: {

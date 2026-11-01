@@ -232,7 +232,11 @@ export const saveLensAction = async (_: FormState, form: FormData): Promise<Form
   saveCopy((copy) => ({
     ...copy,
     lens: {
-      subjects: copy.lens.subjects.map((subject, i) => ({ ...subject, line: text(form, `line${i}`) || subject.line })),
+      subjects: copy.lens.subjects.map((subject, i) => ({
+        ...subject,
+        line: text(form, `line${i}`) || subject.line,
+        essay: text(form, `essay${i}`),
+      })),
     },
   }));
 
