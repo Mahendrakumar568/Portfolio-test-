@@ -15,6 +15,14 @@
   --night-soft: #8f8a80;
 }
 
+/* Text that sits on the night sky of the opening dawn: light until the day arrives. */
+[data-dawn-ink] {
+  transition: color 1.4s ease;
+}
+.dawn-night [data-dawn-ink] {
+  color: var(--night-ink);
+}
+
 @theme inline {
   --color-paper: var(--paper);
   --color-paper-deep: var(--paper-deep);

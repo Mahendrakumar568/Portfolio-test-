@@ -53,10 +53,13 @@ export const Hero = ({ headline, thesis, portrait, editor, role }: Props) => {
       gsap.set(edge, { yPercent: 0 });
       gsap.set(fades, { opacity: 0, y: 24 });
       gsap.set(frame, { clipPath: "inset(100% 0% 0% 0%)" });
+      // Text on the night sky stays light until the day arrives (see .dawn-night in globals.css).
+      document.documentElement.classList.add("dawn-night");
 
       const assemble = () => {
         const tl = gsap.timeline();
-        tl.to(stars, { opacity: 0.85, duration: 0.8, stagger: { each: 0.012, from: "random" } }, 0)
+        tl.call(() => document.documentElement.classList.remove("dawn-night"), undefined, 2.6)
+          .to(stars, { opacity: 0.85, duration: 0.8, stagger: { each: 0.012, from: "random" } }, 0)
           .to(sun, { yPercent: 0, duration: 2.6, ease: "power3.out" }, 0.2)
           .to(sky, { clipPath: "inset(0% 0% 100% 0%)", duration: 2.4, ease: "expo.inOut" }, 1.0)
           .to(edge, { y: () => -(root.current?.offsetHeight ?? window.innerHeight), duration: 2.4, ease: "expo.inOut" }, 1.0)
@@ -210,7 +213,7 @@ export const Hero = ({ headline, thesis, portrait, editor, role }: Props) => {
         </h1>
 
         <div className="mt-auto grid grid-cols-1 items-end gap-8 pt-10 md:grid-cols-12">
-          <p className="max-w-[34ch] text-lg leading-relaxed md:col-span-5 md:text-xl">
+          <p data-dawn-ink className="max-w-[34ch] text-lg leading-relaxed md:col-span-5 md:text-xl">
             {thesis}
           </p>
           <button

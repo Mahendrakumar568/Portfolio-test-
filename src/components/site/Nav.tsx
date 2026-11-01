@@ -43,7 +43,7 @@ export const Nav = ({ signal }: { signal: Signal }) => {
         signal.mode === "featured" ? "top-10" : "top-0"
       } ${hidden ? "-translate-y-[180%]" : "translate-y-0"} ${solid || menuOpen ? "bg-paper/95" : ""}`}
     >
-      <nav className="mx-auto flex max-w-[1440px] items-center justify-between px-5 py-4 md:px-10">
+      <nav data-dawn-ink className="mx-auto flex max-w-[1440px] items-center justify-between px-5 py-4 md:px-10">
         <div className="flex items-center gap-3">
           <Link href="/" className="font-display text-lg leading-none tracking-tight" data-cursor="Home">
             Jithendra Sai Kilaru
