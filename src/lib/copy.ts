@@ -40,6 +40,7 @@ export type SiteCopy = {
     heroEditor: string;
     heroRole: string;
     statements: string[];
+    thesisBridge: string;
     risingIntro: string;
     risingFrequency: string;
     subscribeLabel: string;
@@ -118,13 +119,14 @@ export const DEFAULT_COPY: SiteCopy = {
       "Most breakthroughs are borrowed: a solution mastered in one place, carried to where nobody expected it.",
       "Strategy is choosing which promises to make. Execution is keeping them, on time.",
     ],
+    thesisBridge: "That is how I think. Here is where I test it in public, one edition at a time.",
     risingIntro:
       "A weekly newsletter on LinkedIn: insight and analysis at the intersection of technology, business, geopolitics and the forces shaping what comes next.",
     risingFrequency: "weekly",
     subscribeLabel: "Subscribe on LinkedIn",
     contactHeadline: "Let's talk ideas.",
     contactHeadlineSignal: "Let's start something.",
-    contactLine: "For collaborations, conversations about startups and strategy, or a reply to something in Rising Ideas.",
+    contactLine: "The ideas above are the start of the work. For collaborations, conversations about startups and strategy, or a reply to something in Rising Ideas.",
     readLabel: "Read Rising Ideas",
     writeLabel: "Write to Jithendra",
     linkedinLabel: "Message on LinkedIn",

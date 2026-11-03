@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { gsap, useDeferredGSAP } from "@/lib/gsap";
 import { Folio } from "./Folio";
 
-export const Thesis = ({ statements }: { statements: string[] }) => {
+export const Thesis = ({ statements, bridge }: { statements: string[]; bridge: string }) => {
   const root = useRef<HTMLElement>(null);
 
   useDeferredGSAP(
@@ -47,6 +47,7 @@ export const Thesis = ({ statements }: { statements: string[] }) => {
               ))}
             </p>
           ))}
+          <p className="max-w-[48ch] text-lg leading-relaxed text-ink-soft">{bridge}</p>
         </div>
       </div>
     </section>

@@ -257,6 +257,7 @@ export const saveHomeAction = async (_: FormState, form: FormData): Promise<Form
       heroEditor: text(form, "heroEditor") || copy.home.heroEditor,
       heroRole: text(form, "heroRole") || copy.home.heroRole,
       statements: [0, 1, 2].map((i) => text(form, `statement${i}`) || copy.home.statements[i] || ""),
+      thesisBridge: text(form, "thesisBridge"),
       risingIntro: text(form, "risingIntro") || copy.home.risingIntro,
       risingFrequency: text(form, "risingFrequency") || copy.home.risingFrequency,
       subscribeLabel: text(form, "subscribeLabel") || copy.home.subscribeLabel,

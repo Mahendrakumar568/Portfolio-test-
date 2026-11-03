@@ -25,7 +25,7 @@ export default async function Home() {
         editor={settings.copy.home.heroEditor}
         role={settings.copy.home.heroRole}
       />
-      <Thesis statements={settings.copy.home.statements} />
+      <Thesis statements={settings.copy.home.statements} bridge={settings.copy.home.thesisBridge} />
       <RisingIdeas
         copy={{ intro: settings.copy.home.risingIntro, frequency: settings.copy.home.risingFrequency, subscribeLabel: settings.copy.home.subscribeLabel }}
         subscribers={settings.subscribers}

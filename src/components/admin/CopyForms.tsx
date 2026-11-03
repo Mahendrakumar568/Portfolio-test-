@@ -187,6 +187,9 @@ export const HomeForm = ({ home }: { home: SiteCopy["home"] }) => {
             <textarea name={`statement${i}`} defaultValue={home.statements[i]} rows={2} className={inputClass} />
           </Field>
         ))}
+        <Field label="Line after the statements">
+          <textarea name="thesisBridge" defaultValue={home.thesisBridge} rows={2} className={inputClass} />
+        </Field>
       </Panel>
       <Panel title="Rising Ideas">
         <Field label="Introduction">
