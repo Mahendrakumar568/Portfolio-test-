@@ -15,6 +15,19 @@
   --night-soft: #8f8a80;
 }
 
+/* Dark reading mode, chosen with the theme toggle. Set before first paint by the script in layout.tsx. */
+[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #121317;
+  --paper-deep: #1b1d22;
+  --ink: #ece7dc;
+  --ink-soft: #aba498;
+  --rule: #34363d;
+  --rising: #f2703a;
+  --rising-ink: #f59a66;
+  --ember: #f08c4c;
+}
+
 /* Text that sits on the night sky of the opening dawn: light until the day arrives. */
 [data-dawn-ink] {
   transition: color 1.4s ease;

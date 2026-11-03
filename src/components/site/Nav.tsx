@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import type { Signal } from "@/lib/types";
 import { NAVIGATE } from "./PageTransition";
+import { ThemeToggle } from "./ThemeToggle";
 
 const LINKS = [
   { href: "/#rising-ideas", label: "Rising Ideas" },
@@ -51,6 +52,7 @@ export const Nav = ({ signal }: { signal: Signal }) => {
           {signal.mode === "subtle" && <SunDot message={signal.message} />}
         </div>
         <div className="flex items-center gap-6 md:gap-8">
+          <ThemeToggle />
           <ul className="hidden items-center gap-7 text-sm md:flex">
             {LINKS.map((link) => (
               <li key={link.href}>

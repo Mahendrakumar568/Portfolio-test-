@@ -42,7 +42,19 @@ export const viewport: Viewport = { themeColor: "#F3EFE7" };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${display.variable} ${displayItalic.variable} ${sans.variable} ${mono.variable} ${hand.variable}`}>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${display.variable} ${displayItalic.variable} ${sans.variable} ${mono.variable} ${hand.variable}`}
+    >
+      <head>
+        {/* Applies the saved theme before first paint, so a dark reader never sees a flash of paper. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{if(localStorage.getItem("ri:theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}`,
+          }}
+        />
+      </head>
       <body>{children}</body>
     </html>
   );
