@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Code Snippet</title>
+<style>
+  :root { --bg:#f6f7f9; --card:#ffffff; --fg:#1b1f24; --muted:#5b6470; --line:#dde1e6; --code:#0f1419; --codefg:#e6edf3; --accent:#2563eb; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#0d1117; --card:#161b22; --fg:#e6edf3; --muted:#8b949e; --line:#30363d; --code:#010409; } }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif; }
+  main { max-width:900px; margin:0 auto; padding:40px 16px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+  .bar { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 14px; border-bottom:1px solid var(--line); }
+  .bar span { color:var(--muted); font-size:14px; }
+  button { font:inherit; font-size:14px; padding:6px 14px; border-radius:8px; border:1px solid var(--line); background:var(--accent); color:#fff; cursor:pointer; }
+  button:active { transform:scale(.96); }
+  pre { margin:0; padding:16px; background:var(--code); color:var(--codefg); overflow:auto; font:14px/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; tab-size:4; }
+</style>
+</head>
+<body>
+<main>
+  <div class="card">
+    <div class="bar"><span>snippet</span><button id="copy" type="button">Copy</button></div>
+<pre><code id="code">// Your code will go here.
+console.log("Hello, world!");</code></pre>
+  </div>
+</main>
+<script>
+  const btn = document.getElementById('copy');
+  const code = document.getElementById('code');
+  btn.addEventListener('click', async () => {
+    const text = code.textContent;
+    try { await navigator.clipboard.writeText(text); }
+    catch {
+      const t = document.createElement('textarea'); t.value = text; document.body.appendChild(t);
+      t.select(); document.execCommand('copy'); t.remove();
+    }
+    btn.textContent = 'Copied!';
+    setTimeout(() => (btn.textContent = 'Copy'), 1500);
+  });
+</script>
+</body>
+</html>
