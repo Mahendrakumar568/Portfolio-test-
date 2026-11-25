@@ -16,6 +16,16 @@
   button { font:inherit; font-size:14px; padding:6px 14px; border-radius:8px; border:1px solid var(--line); background:var(--accent); color:#fff; cursor:pointer; }
   button:active { transform:scale(.96); }
   pre { margin:0; padding:16px; background:var(--code); color:var(--codefg); overflow:auto; font:14px/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; tab-size:4; }
+  .notes { margin-top:28px; background:var(--card); border:1px solid var(--line); border-radius:12px; padding:8px 24px 24px; }
+  .notes h2 { font-size:22px; margin:20px 0 4px; }
+  .notes h3 { font-size:18px; margin:24px 0 8px; padding-top:16px; border-top:1px solid var(--line); }
+  .notes ul { padding-left:22px; margin:8px 0; }
+  .notes li { margin:6px 0; }
+  .notes .sub { color:var(--muted); margin:0; }
+  .formula { margin:8px 0 4px; padding:10px 14px; background:var(--bg); border-left:3px solid var(--accent); border-radius:6px; font-family:Cambria,"Times New Roman",serif; font-size:17px; }
+  .formula i { font-style:italic; }
+  dl dt { font-weight:600; margin-top:12px; }
+  dl dd { margin:4px 0 0 0; }
 </style>
 </head>
 <body>
@@ -58,6 +68,53 @@ int main() {
     return 0;
 }</code></pre>
   </div>
+  <section class="notes">
+    <h2>FCFS (First-Come, First-Served) CPU Scheduling</h2>
+    <p class="sub">Theory and viva notes, Operating Systems Lab (CSE 301L)</p>
+
+    <h3>1. Core Definition &amp; Working Principle</h3>
+    <ul>
+      <li><b>What it is:</b> FCFS is the simplest non-preemptive CPU scheduling algorithm where processes are executed strictly in the exact order they arrive in the Ready Queue.</li>
+      <li><b>Data Structure Used:</b> Managed using a standard FIFO (First-In, First-Out) Queue. When a process enters the ready queue, its Process Control Block (PCB) is linked to the tail, and when the CPU becomes free, it is allocated to the process at the head.</li>
+      <li><b>Non-Preemptive Nature:</b> Once the CPU is allocated to a process, it keeps the CPU until it either terminates or switches to a waiting state (for I/O). It cannot be interrupted midway by a newly arrived shorter process.</li>
+    </ul>
+
+    <h3>2. Key Scheduling Terms &amp; Formulas</h3>
+    <p>Examiners almost always ask you to define these four terms from your output table:</p>
+    <ul>
+      <li><b>Burst Time (<i>BT</i>):</b> The total time required by a process for its execution on the CPU.</li>
+      <li><b>Completion Time (<i>CT</i>):</b> The exact timestamp when a process finishes its execution.</li>
+      <li><b>Turnaround Time (<i>TAT</i>):</b> The total time spent by a process in the system (from arrival to completion).
+        <div class="formula">TAT = Completion Time &minus; Arrival Time &nbsp;&nbsp;(or <i>BT</i> + <i>WT</i>)</div></li>
+      <li><b>Waiting Time (<i>WT</i>):</b> The total time a process spends waiting in the ready queue before getting the CPU.
+        <div class="formula">WT = Turnaround Time &minus; Burst Time</div></li>
+    </ul>
+
+    <h3>3. Advantages &amp; Disadvantages</h3>
+    <p><b>Advantages:</b></p>
+    <ul>
+      <li>Easy to understand, implement, and code using a simple FIFO queue.</li>
+      <li><b>No Starvation:</b> Every process eventually gets executed because there is no priority skipping.</li>
+    </ul>
+    <p><b>Disadvantages:</b></p>
+    <ul>
+      <li><b>Convoy Effect:</b> If a long CPU-bound process arrives first, all shorter processes behind it must wait until it finishes, leading to poor CPU and I/O device utilization.</li>
+      <li><b>High Average Waiting Time:</b> Because burst times are ignored, average waiting time is often much higher than in Shortest Job First (SJF) or Round Robin (RR).</li>
+      <li><b>Not suitable for interactive/time-sharing systems:</b> Since it is non-preemptive, users cannot get quick response times.</li>
+    </ul>
+
+    <h3>4. Rapid-Fire Viva Q&amp;A (Likely Examiner Questions)</h3>
+    <dl>
+      <dt>Q: Is FCFS preemptive or non-preemptive?</dt>
+      <dd>A: Strictly non-preemptive.</dd>
+      <dt>Q: What is the Convoy Effect?</dt>
+      <dd>A: A phenomenon where multiple short processes get held up behind one long CPU-intensive process, causing low throughput and high average waiting time.</dd>
+      <dt>Q: Which scheduling criteria does FCFS optimize, if any?</dt>
+      <dd>A: It minimizes scheduling overhead (very few context switches) and guarantees zero starvation, though it does not optimize waiting time or response time.</dd>
+      <dt>Q: What happens in your code if all processes arrive at <i>t</i> = 0?</dt>
+      <dd>A: They execute in the input order (<i>P</i><sub>1</sub>, <i>P</i><sub>2</sub>, <i>P</i><sub>3</sub>, &hellip;), so <i>P</i><sub>1</sub>&rsquo;s waiting time is 0, and each subsequent process&rsquo;s waiting time is the sum of the burst times of all preceding processes.</dd>
+    </dl>
+  </section>
 </main>
 <script>
   const btn = document.getElementById('copy');
